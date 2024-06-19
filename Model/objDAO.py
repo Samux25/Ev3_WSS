@@ -14,18 +14,34 @@ class UsuarioBD:
             self.cursor.execute(sql)
             Empleados = self.cursor.fetchall()
             if len(Empleados) != 0:
-                for dt in Empleados:
-                    print("Id                  : " + str(dt[0]))
-                    print("Nombre              : " + dt[1])
-                    print("Correo              : " + dt[2])
-                    print("Telefono            : " +str(dt[3]))
-                    print("Direccion_Residencia: " +dt[4])
-                    print("Cargo               : " +dt[5])
+                for empleado in Empleados:
+                    print("Id                  : " + str(empleado[0]))
+                    print("Nombre              : " + empleado[1])
+                    print("Correo              : " + empleado[2])
+                    print("Telefono            : " +str(empleado[3]))
+                    print("Direccion_Residencia: " +empleado[4])
+                    print("Cargo               : " +empleado[5])
             else: 
                 print("No hay ningun trabajador")
         except Exception as ex:
             print("Error: " + str(ex.args))
-    
+        
+    def verUsuario(self,rut):
+        sql = "SELECT * FROM empleado WHERE empleado.rut = '"+rut+"'"
+        try:
+            self.cursor.execute(sql)
+            Usuario = self.cursor.fetchone()
+            if Usuario != None:
+                    print("Id                  : " + str(Usuario[0]))
+                    print("Nombre              : " + Usuario[1])
+                    print("Correo              : " + Usuario[2])
+                    print("Telefono            : " + str(Usuario[3]))
+                    print("Direccion_Residencia: " + Usuario[4])
+                    print("Cargo               : " + Usuario[5])
+            else: 
+                print("No hay ningun empleado con ese Rut")
+        except Exception as ex:
+            print("Error: " + str(ex.args))
     def verARTS(self):
         sql = "SELECT * FROM art"
         try: 
@@ -84,9 +100,3 @@ class UsuarioBD:
                 print("No hay ningun Riesgo Critico")
         except Exception as ex:
             print("Error: " +str(ex.args))
-
-u = UsuarioBD()
-u.verUsuarios()
-u.verARTS()
-u.verActividades()
-u.verRiesgosCriticos()
