@@ -29,21 +29,40 @@ class Empleado:
     def getContraseña(self):
         return self.__Contraseña
     
+    def setRut(self,nuevoRut):
+        self.__Rut = nuevoRut
 
-class realiza:
-    def __init__(self):
-        self.__RutEmpleado = []
-        self.__IdArt = []
+    def setNombreCompleto(self,nuevoNombre):
+        self.__NombreCompleto = nuevoNombre
+
+    def setCorreo(self,nuevoCorreo):
+        self.__Correo = nuevoCorreo
+
+    def setTelefono(self,nuevoTelefono):
+        self.__Telefono = nuevoTelefono
+
+    def setDireccionResidencia(self,nuevaResidencia):
+        self.__DireccionResidencia = nuevaResidencia
+
+    def setCargo(self,nuevoCargo):
+        self.__Cargo = nuevoCargo
+
+    def setContraseña(self,nuevaContraseña):
+        self.__Contraseña = nuevaContraseña
 
 class ART:
     def __init__(self,Fecha,HoraInicio,HoraTermino):
+        self.__realiza = []
         self.__TrabajoSimultaneo = False
-        self.__PreguntasTrabajador = {}
+        self.__PreguntaTrabajador = []
+        self.__PreguntaSupervisor = []
         self.__EstadoTrabajador = False
-        self.__PreguntasSupervisor = {}
         self.__Fecha = Fecha
         self.__HoraInicio = HoraInicio
         self.__HoraTermino = HoraTermino
+    
+    def getRealiza(self):
+        return self.__realiza
 
     def getTrabajoSimultaneo(self):
         return self.__TrabajoSimultaneo
@@ -65,7 +84,31 @@ class ART:
     
     def getHoraTermino(self):
         return self.__HoraTermino
+    
+    def setRealiza(self,nuevoRealiza):
+        self.__realiza = nuevoRealiza
+    
+    def setTrabajoSimultaneo(self,nuevoTrabajoSimultaneo):
+        self.__TrabajoSimultaneo = nuevoTrabajoSimultaneo
+    
+    def setPreguntaTrabajador(self,nuevaPreguntaTrabajador):
+        self.__PreguntaTrabajador = nuevaPreguntaTrabajador
+    
+    def setPreguntaSupervisor(self,nuevaPreguntaSupervisor):
+        self.__PreguntaSupervisor = nuevaPreguntaSupervisor
 
+    def setEstadoTrabajador(self,nuevoEstado):
+        self.__EstadoTrabajador = nuevoEstado
+    
+    def setFecha(self,nuevaFecha):
+        self.__Fecha = nuevaFecha
+    
+    def setHoraInicio(self,nuevaHoraInicio):
+        self.__HoraInicio = nuevaHoraInicio
+    
+    def setHoraTermino(self,nuevaHoraTermino):
+        self.__HoraTermino = nuevaHoraTermino
+    
 class Actividad: 
     def __init__(self,Nombre,Descripcion,Riesgo,MedidaControl):
         self.__Nombre = Nombre
@@ -84,26 +127,39 @@ class Actividad:
     
     def getMedidaControl(self):
         return self.__MedidaControl
-
+    
+    def setNombre(self,nuevoNombre):
+        self.__Nombre = nuevoNombre
+    
+    def setDescripcion(self,nuevaDescripcion):
+        self.__Descripcion = nuevaDescripcion
+    
+    def setRiesgo(self,nuevoRiesgo):
+        self.__Riesgo = nuevoRiesgo
+    
+    def setMedidaControl(self,nuevaMedida):
+        self.__MedidaControl = nuevaMedida
 
 class Riego_critico:
-    def __init__(self, Nombre):
+    def __init__(self, Nombre,Pregunta,Correcta):
         self.__Nombre = Nombre
-        self.__Pregunta = {}
+        self.__Pregunta = Pregunta
+        self.__Correcta = Correcta
 
     def getNombre(self):
         return self.__Nombre
     
     def getPregunta(self):
         return self.__Pregunta
+    
+    def getCorrecta(self): 
+        return self.__Correcta
+    
+    def setNombre(self,nuevoNombre):
+        self.__Nombre = nuevoNombre
 
-class pregunta_rc:
-    def __init__(self, Pregunta):
-        self.__Pregunta = Pregunta
-        self.__Respuesta = {}
+    def setPregunta(self,nuevaPregunta):
+        self.__Pregunta = nuevaPregunta
 
-    def getPregunta(self):
-        return self.__Pregunta
-
-    def getRespuesta(self):
-        return self.__Respuesta
+    def setCorrecta(self,nuevaCorrecta):
+        self.__Correcta = nuevaCorrecta
