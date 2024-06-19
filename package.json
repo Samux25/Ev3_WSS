@@ -1,0 +1,17 @@
+{
+  "name": "wss",
+  "version": "0.0.1",
+  "description": "WSS trabajo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "python",
+    "github",
+    "git",
+    "mysql"
+  ],
+  "author": "R2D2",
+  "license": "MIT"
+}
