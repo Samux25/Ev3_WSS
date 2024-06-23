@@ -100,3 +100,15 @@ class UsuarioBD:
                 print("No hay ningun Riesgo Critico")
         except Exception as ex:
             print("Error: " +str(ex.args))
+    
+    def sacarIdActividad(self,actividad):
+        sql = "select id_actividad from actividad where '"+ actividad + "' = nombre"
+        try: 
+            self.cursor.execute(sql)
+            IdActividad = self.cursor.fetchone()
+            if IdActividad != None:
+                return IdActividad
+            else: 
+                print("No hay ninguna actividad con ese nombre")
+        except Exception as ex:
+            print("Error: " + str(ex.args))
