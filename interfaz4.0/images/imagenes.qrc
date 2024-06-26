@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="x">
+    <file>comprimir.svg</file>
+    <file>expandir.svg</file>
+    <file>facebook.svg</file>
+    <file>imagenes.qrc</file>
+    <file>logo.png</file>
+    <file>minimizar-ventana.svg</file>
+    <file>x.svg</file>
+  </qresource>
+</RCC>
