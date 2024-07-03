@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
--- Host: localhost    Database: wss_db
+-- Host: localhost    Database: wss
 -- ------------------------------------------------------
 -- Server version	8.0.30
 
@@ -28,7 +28,7 @@ CREATE TABLE `actividad` (
   `riesgo` varchar(30) NOT NULL,
   `medida_control` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id_actividad`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `actividad` (
 
 LOCK TABLES `actividad` WRITE;
 /*!40000 ALTER TABLE `actividad` DISABLE KEYS */;
-INSERT INTO `actividad` VALUES (1,'Cortes','Medio','Guantes Anticorte'),(2,'Masado de muestras','TMERT','Adoptar buenas posturas'),(3,'Lixiviaxión','Caída mismo nivel','Mantener área ordena y limpia'),(4,'Digestión acida','Inhalación gases toxicos','Uso de respirador y careta'),(5,'Lavado de material','Quemadura con plancha','Utilizar EPP'),(6,'Lectura de muestras por absorcion','Exposición UV','Uso de protector, mantener distancia');
+INSERT INTO `actividad` VALUES (1,'Cortes','Medio','Guantes Anticorte'),(2,'Masado de muestras','TMERT','Adoptar buenas posturas'),(3,'Lixiviaxión','Caída mismo nivel','Mantener área ordena y limpia'),(4,'Digestión acida','Inhalación gases toxicos','Uso de respirador y careta'),(5,'Lavado de material','Quemadura con plancha','Utilizar EPP'),(6,'Lectura de muestras por absorcion','Exposición UV','Uso de protector, mantener distancia'),(7,'Test','Caida mismo nivel','Mantener área ordenada y limpia');
 /*!40000 ALTER TABLE `actividad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ CREATE TABLE `art` (
   PRIMARY KEY (`id_ART`),
   KEY `id_actividad` (`id_actividad`),
   CONSTRAINT `art_ibfk_1` FOREIGN KEY (`id_actividad`) REFERENCES `actividad` (`id_actividad`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `art` (
 
 LOCK TABLES `art` WRITE;
 /*!40000 ALTER TABLE `art` DISABLE KEYS */;
-INSERT INTO `art` VALUES (1,1,1,1,'00:00:00','00:00:00'),(2,0,2,1,'00:00:00','00:00:00'),(3,0,1,0,'00:00:00','00:00:00'),(4,1,4,1,'00:00:00','00:00:00'),(5,1,3,0,'00:00:00','00:00:00');
+INSERT INTO `art` VALUES (1,1,1,1,'00:00:00','00:00:00'),(2,0,2,1,'00:00:00','00:00:00'),(3,0,1,0,'00:00:00','00:00:00'),(4,1,4,1,'00:00:00','00:00:00'),(5,1,3,0,'00:00:00','00:00:00'),(6,1,1,1,'22:26:21','00:18:00'),(7,1,1,1,'22:29:19','00:18:00'),(8,1,1,1,'22:29:24','00:18:00'),(9,1,1,1,'22:29:50','00:18:00'),(10,1,1,1,'22:30:26','00:18:00'),(11,1,1,1,'22:30:26','00:18:00'),(12,1,1,1,'22:31:14','00:18:00'),(13,1,1,1,'22:31:14','00:18:00'),(14,1,1,1,'22:34:40','24:18:00'),(15,1,1,1,'22:41:01','24:18:00'),(16,1,1,1,'22:46:57','18:27:00');
 /*!40000 ALTER TABLE `art` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,7 @@ CREATE TABLE `empleado` (
 
 LOCK TABLES `empleado` WRITE;
 /*!40000 ALTER TABLE `empleado` DISABLE KEYS */;
-INSERT INTO `empleado` VALUES ('187697653','Carolina Ramirez','Carolina123@gmail.com','989976554','dos','Supervisor','carolina123'),('208971234','Vladimir Heriquez ','Vladimir@gmail.com','978653454','tres','Químico analista','vladimmir1234'),('218679323','Margarita cordera','margarita@gmail.com','73378556','uno','Tec, Quimico','maar123'),('224750987','Karen Herrera','Karen12@gmail.com','941281473','cero','Auxliar Lavado','Karen123'),('236980472','Checo Perez','Chequito@gmail.com','+579524256','Le mans','Supervisor','Samuel123');
+INSERT INTO `empleado` VALUES ('123456789','Alvaro Vergara','elperroloco@gmail.com','222222222','antofa','Supervisor','Alvaricoque'),('187697653','Carolina Ramirez','Carolina123@gmail.com','989976554','dos','Supervisor','carolina123'),('208971234','Vladimir Heriquez ','Vladimir@gmail.com','978653454','tres','Químico analista','vladimmir1234'),('218679323','Margarita cordera','margarita@gmail.com','73378556','uno','Tec, Quimico','maar123'),('224750987','Karen Herrera','Karen12@gmail.com','941281473','cero','Auxliar Lavado','Karen123'),('236980472','Checo Perez','Chequito@gmail.com','+579524256','Le mans','Supervisor','Samuel123');
 /*!40000 ALTER TABLE `empleado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,6 +150,7 @@ CREATE TABLE `posee` (
 
 LOCK TABLES `posee` WRITE;
 /*!40000 ALTER TABLE `posee` DISABLE KEYS */;
+INSERT INTO `posee` VALUES (1,1),(2,2),(3,4);
 /*!40000 ALTER TABLE `posee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -201,7 +202,7 @@ CREATE TABLE `realiza` (
 
 LOCK TABLES `realiza` WRITE;
 /*!40000 ALTER TABLE `realiza` DISABLE KEYS */;
-INSERT INTO `realiza` VALUES ('187697653',1,'2024-07-15');
+INSERT INTO `realiza` VALUES ('187697653',1,'2024-07-15'),('208971234',15,'2024-06-26'),('208971234',16,'2024-06-26');
 /*!40000 ALTER TABLE `realiza` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,8 +233,46 @@ INSERT INTO `riesgocritico` VALUES (1,'Test 1 ',1,1),(2,'Test 1',1,1),(3,'Test 3
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'wss_db'
+-- Temporary view structure for view `ver_arts`
 --
+
+DROP TABLE IF EXISTS `ver_arts`;
+/*!50001 DROP VIEW IF EXISTS `ver_arts`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `ver_arts` AS SELECT 
+ 1 AS `rut`,
+ 1 AS `nombre_completo`,
+ 1 AS `fecha`,
+ 1 AS `hora_inicio`,
+ 1 AS `hora_termino`,
+ 1 AS `trabajo_simultaneo`,
+ 1 AS `nombre`,
+ 1 AS `estado_trabajador`,
+ 1 AS `cargo`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping routines for database 'wss'
+--
+
+--
+-- Final view structure for view `ver_arts`
+--
+
+/*!50001 DROP VIEW IF EXISTS `ver_arts`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `ver_arts` AS select `e`.`rut` AS `rut`,`e`.`nombre_completo` AS `nombre_completo`,`r`.`fecha` AS `fecha`,`a`.`hora_inicio` AS `hora_inicio`,`a`.`hora_termino` AS `hora_termino`,`a`.`trabajo_simultaneo` AS `trabajo_simultaneo`,`ac`.`nombre` AS `nombre`,`a`.`estado_trabajador` AS `estado_trabajador`,`e`.`cargo` AS `cargo` from (((`art` `a` left join `realiza` `r` on((`r`.`id_ART` = `a`.`id_ART`))) left join `empleado` `e` on((`e`.`rut` = `r`.`rut`))) left join `actividad` `ac` on((`a`.`id_actividad` = `ac`.`id_actividad`))) where (`e`.`rut` = `r`.`rut`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -244,4 +283,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-26 14:08:09
+-- Dump completed on 2024-07-03 11:53:37

@@ -29,6 +29,7 @@ class Empleado:
     def getContraseña(self):
         return self.__Contraseña
     
+    
     def setRut(self,nuevoRut):
         self.__Rut = nuevoRut
 
@@ -49,65 +50,34 @@ class Empleado:
 
     def setContraseña(self,nuevaContraseña):
         self.__Contraseña = nuevaContraseña
-
+    
 class ART:
-    def __init__(self,Fecha,HoraInicio,HoraTermino):
-        self.__realiza = []
+    def __init__(self,actividad,horaTermino):
         self.__TrabajoSimultaneo = False
-        self.__PreguntaTrabajador = []
-        self.__PreguntaSupervisor = []
         self.__EstadoTrabajador = False
-        self.__Fecha = Fecha
-        self.__HoraInicio = HoraInicio
-        self.__HoraTermino = HoraTermino
-    
-    def getRealiza(self):
-        return self.__realiza
-
-    def getTrabajoSimultaneo(self):
-        return self.__TrabajoSimultaneo
-    
-    def getPreguntasTrabajador(self):
-        return self.__PreguntasTrabajador
+        self.__Actividad = actividad
+        self.__HoraTermino = horaTermino
     
     def getEstadoTrabajador(self):
         return self.__EstadoTrabajador
     
-    def getPreguntasSupervisor(self):
-        return self.__PreguntasSupervisor
-    
-    def getFecha(self):
-        return self.__Fecha
-    
-    def getHoraInicio(self):
-        return self.__HoraInicio
-    
     def getHoraTermino(self):
         return self.__HoraTermino
     
-    def setRealiza(self,nuevoRealiza):
-        self.__realiza = nuevoRealiza
+    def getActividad(self):
+        return self.__Actividad
     
     def setTrabajoSimultaneo(self,nuevoTrabajoSimultaneo):
         self.__TrabajoSimultaneo = nuevoTrabajoSimultaneo
-    
-    def setPreguntaTrabajador(self,nuevaPreguntaTrabajador):
-        self.__PreguntaTrabajador = nuevaPreguntaTrabajador
-    
-    def setPreguntaSupervisor(self,nuevaPreguntaSupervisor):
-        self.__PreguntaSupervisor = nuevaPreguntaSupervisor
 
     def setEstadoTrabajador(self,nuevoEstado):
         self.__EstadoTrabajador = nuevoEstado
     
-    def setFecha(self,nuevaFecha):
-        self.__Fecha = nuevaFecha
-    
-    def setHoraInicio(self,nuevaHoraInicio):
-        self.__HoraInicio = nuevaHoraInicio
-    
     def setHoraTermino(self,nuevaHoraTermino):
         self.__HoraTermino = nuevaHoraTermino
+
+    def setActvidad(self,nuevaActividad):
+        self.__Actividad = nuevaActividad
     
 class Actividad: 
     def __init__(self,Nombre,Descripcion,Riesgo,MedidaControl):
