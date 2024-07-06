@@ -52,11 +52,17 @@ class Empleado:
         self.__Contraseña = nuevaContraseña
     
 class ART:
-    def __init__(self,actividad,horaTermino):
-        self.__TrabajoSimultaneo = False
-        self.__EstadoTrabajador = False
+    def __init__(self,trabajoSimultaneo,actividad,estadoTrabajador,horaTermino):
+        self.__TrabajoSimultaneo = trabajoSimultaneo
         self.__Actividad = actividad
+        self.__EstadoTrabajador = estadoTrabajador
         self.__HoraTermino = horaTermino
+    
+    def getTrabajoSimultaneo(self):
+        return self.__TrabajoSimultaneo
+
+    def getActividad(self):
+        return self.__Actividad
     
     def getEstadoTrabajador(self):
         return self.__EstadoTrabajador
@@ -64,11 +70,11 @@ class ART:
     def getHoraTermino(self):
         return self.__HoraTermino
     
-    def getActividad(self):
-        return self.__Actividad
-    
     def setTrabajoSimultaneo(self,nuevoTrabajoSimultaneo):
         self.__TrabajoSimultaneo = nuevoTrabajoSimultaneo
+    
+    def setActvidad(self,nuevaActividad):
+        self.__Actividad = nuevaActividad
 
     def setEstadoTrabajador(self,nuevoEstado):
         self.__EstadoTrabajador = nuevoEstado
@@ -76,15 +82,12 @@ class ART:
     def setHoraTermino(self,nuevaHoraTermino):
         self.__HoraTermino = nuevaHoraTermino
 
-    def setActvidad(self,nuevaActividad):
-        self.__Actividad = nuevaActividad
-    
 class Actividad: 
-    def __init__(self,Nombre,Descripcion,Riesgo,MedidaControl):
-        self.__Nombre = Nombre
-        self.__Descripcion = Descripcion
-        self.__Riesgo = Riesgo
-        self.__MedidaControl = MedidaControl
+    def __init__(self,nombre,descripcion,riesgo,medidaControl):
+        self.__Nombre = nombre
+        self.__Descripcion = descripcion
+        self.__Riesgo = riesgo
+        self.__MedidaControl = medidaControl
 
     def getNombre(self):
         return self.__Nombre
@@ -111,10 +114,10 @@ class Actividad:
         self.__MedidaControl = nuevaMedida
 
 class Riego_critico:
-    def __init__(self, Nombre,Pregunta,Correcta):
-        self.__Nombre = Nombre
-        self.__Pregunta = Pregunta
-        self.__Correcta = Correcta
+    def __init__(self, nombre,pregunta,respuestaCorrecta):
+        self.__Nombre = nombre
+        self.__Pregunta = pregunta
+        self.__Correcta = respuestaCorrecta
 
     def getNombre(self):
         return self.__Nombre

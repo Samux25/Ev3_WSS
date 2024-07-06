@@ -1,5 +1,6 @@
 from pymysql import * 
-class UsuarioBD:
+from objDTO import * 
+class BD_WSS:
     def __init__(self):
         self.conector = connect(
             host='localhost',
@@ -7,6 +8,32 @@ class UsuarioBD:
             password='',
             db='wss')
         self.cursor = self.conector.cursor()
+    
+    def buscarRut(self,rut):
+        sql = "SELECT rut From empleado WHERE rut = '"+rut+"'"
+        try:
+            self.cursor.execute(sql)
+            Empleado = self.cursor.fetchone()
+            if Empleado != None: 
+                msg = "Si"
+            else: 
+                msg = 'No'
+        except Exception as ex:
+            msg = "Error: " +str(ex.args)
+        return msg
+
+    def buscarFecha(self,fecha):
+        sql = "SELECT fecha From ver_arts WHERE fecha = '"+fecha+"'"
+        try:
+            self.cursor.execute(sql)
+            fechas = self.cursor.fetchall()
+            if len(fechas) != 0:
+                msg = "Si"
+            else: 
+                msg = 'No'
+        except Exception as ex:
+            msg = "Error: " +str(ex.args)
+        return msg
     
     def sacarIdActividad(self,actividad):
         sql = "select id_actividad from actividad where '"+ actividad + "' = nombre;"
@@ -31,31 +58,30 @@ class UsuarioBD:
                 return "No hay ninguna ART ingresada"
         except Exception as ex:
             print("Error: " + str(ex.args))
-
-    def crearArt(self,rut,trabajoSimultaneo,actividad,estadoTrabajador,horaTermino):
-        msg = "ART Creada Correctamente"
-        tbs = int(trabajoSimultaneo)
-        est = int(estadoTrabajador)
+    
+    def realiza(self,rut):
         idART = self.idUltimaART()
-        idActividad = self.sacarIdActividad(actividad)
-        sql = "INSERT INTO art(trabajo_simultaneo, id_actividad, estado_trabajador, hora_inicio, hora_termino) VALUES ('"+str(tbs)+"', '"+str(idActividad)+"','"+str(est)+"', DATE_FORMAT(NOW(), '%H:%i:%S') ,'"+str(horaTermino)+"');"
-        sql2 = "INSERT INTO realiza(rut, id_ART, fecha) VALUES ('"+rut+"','"+str(idART)+"', CURDATE());" 
+        sql = "INSERT INTO realiza(rut, id_ART, fecha) VALUES ('"+rut+"','"+str(idART)+"', CURDATE());"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+        except Exception as ex:
+            msg = "Error en realiza: " +str(ex.args)
+        return msg
+
+    def crearArt(self,nueva,rut):
+        msg = "ART Creada Correctamente"
+        sql = "INSERT INTO art(trabajo_simultaneo, id_actividad, estado_trabajador, hora_inicio, hora_termino) VALUES ('"+str(nueva.getTrabajoSimultaneo())+"', '"+str(nueva.getActividad())+"','"+str(nueva.getEstadoTrabajador())+"', DATE_FORMAT(NOW(), '%H:%i:%S') ,'"+str(nueva.getHoraTermino())+"');"
         try: 
             self.cursor.execute(sql)
             self.conector.commit()
-            return msg
+            self.realiza(rut)
         except Exception as ex:
             msg = "Error : " + str(ex.args)
+        return msg
 
-        try:
-            self.cursor.execute(sql2)
-            self.conector.commit()
-        except Exception as ex:
-            msg2 = "Error en realiza: " +str(ex.args)
-        return msg, msg2
-    
-    def crearEmpleado(self,rut,nombre,correo,telefono,direccionResidencia,cargo,contraseña):
-        sql = "INSERT INTO empleado(rut,nombre_completo,correo,telefono,direccion_residencia,cargo,contraseña) VALUES ('"+rut+"', '"+nombre+"','"+correo+"','"+str(telefono)+"', '"+direccionResidencia+"','"+cargo+"','"+contraseña+"');"
+    def crearEmpleado(self,nuevo):
+        sql = "INSERT INTO empleado(rut,nombre_completo,correo,telefono,direccion_residencia,cargo,contraseña) VALUES ('"+nuevo.getRut()+"', '"+nuevo.getNombreCompleto()+"','"+nuevo.getCorreo()+"','"+str(nuevo.getTelefono())+"', '"+nuevo.getDireccionResidencia()+"','"+nuevo.getCargo()+"','"+nuevo.getContraseña()+"');"
         msg = "El empleado a sido creado Correctamente"
         try:
             self.cursor.execute(sql)
@@ -193,6 +219,3 @@ class UsuarioBD:
         except Exception as ex:
             msg =  "Error: " + str(ex.args)
         return msg 
-
-U = UsuarioBD()
-
