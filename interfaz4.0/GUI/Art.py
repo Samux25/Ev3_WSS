@@ -1,12 +1,11 @@
 from PyQt6.QtWidgets import QMainWindow
-from GUI.ui_trabajador import Ui_MainWindow
-from GUI.Art import ART
+from GUI.ui_ART import Ui_MainWindow
 from PyQt6 import QtCore, QtWidgets
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QPointF
 
-class Trabajador(QMainWindow, Ui_MainWindow):
+class ART(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -27,7 +26,26 @@ class Trabajador(QMainWindow, Ui_MainWindow):
         self.showMaximized()
 
         self.ElegirArt.currentIndexChanged.connect(self.elegirArt)
+        self.PT1_si.clicked.connect(self.pregunta1)
+        self.PT1_no.clicked.connect(self.pregunta1)
+        self.PT2_si.clicked.connect(self.pregunta2)
+        self.PT2_no.clicked.connect(self.pregunta2)
+        self.PT3_si.clicked.connect(self.pregunta3)
+        self.PT3_no.clicked.connect(self.pregunta3)
+        self.PT4_si.clicked.connect(self.pregunta4)
+        self.PT4_no.clicked.connect(self.pregunta4)
+        self.PT5_si.clicked.connect(self.pregunta5)
+        self.PT5_no.clicked.connect(self.pregunta5)
+        self.PT6_si.clicked.connect(self.pregunta6)
+        self.PT6_no.clicked.connect(self.pregunta6)
 
+
+        self.respuesta_PT1 = None
+        self.respuesta_PT2 = None
+        self.respuesta_PT3 = None
+        self.respuesta_PT4 = None
+        self.respuesta_PT5 = None
+        self.respuesta_PT6 = None
 
     def control_bt_normal(self): 
         self.showNormal()
@@ -62,18 +80,44 @@ class Trabajador(QMainWindow, Ui_MainWindow):
             self.bt_normal.hide()
             self.bt_maximize.show()
 
-    def abrirArt(self):
+    def pregunta1(self):
+        if self.sender() == self.PT1_si:
+            self.respuesta_PT1 = "SI"
+        elif self.sender() == self.PT1_no:
+            self.respuesta_PT1 = "NO"
 
-        self.supervisor = ART()
+    def pregunta2(self):
+        if self.sender() == self.PT2_si:
+            self.respuesta_PT2 = "SI"
+        elif self.sender() == self.PT2_no:
+            self.respuesta_PT2 = "NO"
 
-    def elegirArt(self,index):
-        artElegido = self.ElegirArt.itemText(index)
+    def pregunta3(self):
+        if self.sender() == self.PT3_si:
+            self.respuesta_PT3 = "SI"
+        elif self.sender() == self.PT3_no:
+            self.respuesta_PT3 = "NO"
 
-    def iniciarArt(self):
-        self.iniciarArt.clicked.connect(self.abrirArt)
+    def pregunta4(self):
+        if self.sender() == self.PT4_si:
+            self.respuesta_PT4 = "SI"
+        elif self.sender() == self.PT4_no:
+            self.respuesta_PT4 = "NO"
+
+    def pregunta5(self):
+        if self.sender() == self.PT5_si:
+            self.respuesta_PT5 = "SI"
+        elif self.sender() == self.PT5_no:
+            self.respuesta_PT5 = "NO"
+
+    def pregunta6(self):
+        if self.sender() == self.PT6_si:
+            self.respuesta_PT6 = "SI"
+        elif self.sender() == self.PT6_no:
+            self.respuesta_PT6 = "NO"
 
 if __name__ == "__main__":
         app = QApplication([])
-        window = Trabajador()
+        window = ART()
         window.show()
         app.exec()
