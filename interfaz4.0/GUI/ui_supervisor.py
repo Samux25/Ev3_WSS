@@ -12,11 +12,11 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        image_logo = os.path.join(sys._MEIPASS, "images/logo.png")
-        icon_Cerrar = os.path.join(sys._MEIPASS, "images/x.svg")
-        icon_minimizar = os.path.join(sys._MEIPASS, "images/minimizar-ventana.svg")
-        icon_expandir = os.path.join(sys._MEIPASS, "images/expandir.svg")
-        icon_comprimir = os.path.join(sys._MEIPASS, "images/comprimir.svg")
+        image_logo = os.path.join("images/logo.png")
+        icon_Cerrar = os.path.join("images/x.svg")
+        icon_minimizar = os.path.join("images/minimizar-ventana.svg")
+        icon_expandir = os.path.join("images/expandir.svg")
+        icon_comprimir = os.path.join("images/comprimir.svg")
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1190, 600)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
