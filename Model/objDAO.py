@@ -6,9 +6,27 @@ class BD_WSS:
             host='localhost',
             user='root',
             password='',
-            db='wss')
+            db='wss_db4')
         self.cursor = self.conector.cursor()
-    
+
+    def login(self, objDTO: empleado):
+        sql = """SELECT * FROM empleado WHERE cargo=%s AND rut=%s AND contraseña=%s"""
+        self.cursor.execute(sql, ("Trabajador", objDTO.getRut2(), objDTO.getContrasena2()))
+        fila = self.cursor.fetchone()
+        if fila:
+            user = empleado(Cargo=fila[0], Rut=fila[1], Contrasena=fila[2])
+            return user
+        return None
+
+    def loginSuper(self, objDTO: empleado):
+        sql = """SELECT * FROM empleado WHERE cargo=%s AND rut=%s AND contraseña=%s"""
+        self.cursor.execute(sql, ("Supervisor", objDTO.getRut2(), objDTO.getContrasena2()))
+        fila = self.cursor.fetchone()
+        if fila:
+            user = empleado(Cargo=fila[0], Rut=fila[1], Contrasena=fila[2])
+            return user
+        return None
+
     def buscarRut(self,rut):
         sql = "SELECT rut From empleado WHERE rut = '"+rut+"'"
         try:

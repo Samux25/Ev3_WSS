@@ -50,7 +50,31 @@ class Empleado:
 
     def setContraseña(self,nuevaContraseña):
         self.__Contraseña = nuevaContraseña
+
+class empleado():
+    def __init__(self, Cargo="", Rut="", Contrasena=""):
+        self.__cargo = Cargo
+        self.__rut = Rut
+        self.__contrasena = Contrasena
+
+    def getRut2(self):
+        return self.__rut
     
+    def getCargo2(self):
+        return self.__cargo
+    
+    def getContrasena2(self):
+        return self.__contrasena
+
+    def setRut2(self,nuevoRut2):
+        self._nuevoRut2 = nuevoRut2
+
+    def setCargo2(self,nuevoCargo2):
+        self._nuevoCargo2 = nuevoCargo2
+
+    def setContraseña2(self,NuevoContraseña2):
+        self._NuevoContraseña2 = NuevoContraseña2
+
 class ART:
     def __init__(self,trabajoSimultaneo,actividad,estadoTrabajador,horaTermino):
         self.__TrabajoSimultaneo = trabajoSimultaneo

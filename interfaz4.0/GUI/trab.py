@@ -89,6 +89,18 @@ class Trabajador(QMainWindow, Ui_MainWindow):
     def IniciarArt(self):
         self.iniciarArt.clicked.connect(self.abrirArt)
 
+    def nombreTrab(self):
+        pass
+
+    def direccionTrab(self):
+        pass
+
+    def telefonoTrab(self):
+        pass
+
+    def correoTrab(Self):
+        pass
+
 if __name__ == "__main__":
         app = QApplication([])
         window = Trabajador()

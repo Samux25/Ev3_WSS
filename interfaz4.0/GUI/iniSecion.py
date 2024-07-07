@@ -1,11 +1,17 @@
+import sys
+sys.path.append("C:/Ev3_WSS/Ev3_WSS/Model")
 from PyQt6.QtWidgets import QMainWindow, QLineEdit
 from GUI.ui_inicioSesion import Ui_MainWindow
 from PyQt6.QtCore import Qt
 from PyQt6 import QtCore, QtWidgets
 from GUI.trab import Trabajador
 from GUI.supervisor import Supervisor
-from data.usuario import userData
-from model.user import empleado
+#from data.usuario import userData
+
+from objDAO import BD_WSS
+from objDTO import empleado
+
+#from model.user import empleado
 from PyQt6.QtCore import Qt, QPointF
 
 class Login(QMainWindow, Ui_MainWindow):
@@ -82,8 +88,8 @@ class Login(QMainWindow, Ui_MainWindow):
             self.contraUser.setFocus()
         else:
             self.lblmss.setText("")
-            usu = empleado(rut=self.rutUser.text(),contra=self.contraUser.text())
-            usuData = userData()
+            usu = empleado(Rut=self.rutUser.text(),Contrasena=self.contraUser.text())
+            usuData = BD_WSS()
             res = usuData.login(usu)
             if res:
                 self.lblmss.setText("Iniciando sesion")
@@ -101,8 +107,8 @@ class Login(QMainWindow, Ui_MainWindow):
             self.contraUser.setFocus()
         else:
             self.lblmss.setText("")
-            usu = empleado(rut=self.rutUser.text(),contra=self.contraUser.text())
-            usuData = userData()
+            usu = empleado(Rut=self.rutUser.text(),Contrasena=self.contraUser.text())
+            usuData = BD_WSS()
             res = usuData.loginSuper(usu)
             if res:
                 self.lblmss.setText("Iniciando sesion")
@@ -110,7 +116,6 @@ class Login(QMainWindow, Ui_MainWindow):
                 self.hide()
             else:
                 self.lblmss.setText("Datos Incorrectos")
-
 
     def InicioSesion(self):
         self.iniciarSesion.clicked.connect(self.ingresartrab)

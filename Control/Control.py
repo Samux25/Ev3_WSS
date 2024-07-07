@@ -1,7 +1,7 @@
 import sys 
-sys.path.append("D:/Codigos/WSS/Model")
-from objDTO import *
-from objDAO import *
+sys.path.append("C:/Ev3_WSS/Ev3_WSS")
+from Model.objDTO import *
+from Model.objDAO import *
 
 class Controlador: 
     def __init__(self):
