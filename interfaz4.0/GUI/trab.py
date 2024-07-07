@@ -6,6 +6,20 @@ from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QPointF
 
+def procesarSeleccion(seleccion):
+    if seleccion == 'Lavado de material':
+        return 'Lavado de material'
+    elif seleccion == 'Lecturas en equipo de A.A.':
+        return 'Lecturas en equipo de A.A.'
+    elif seleccion == 'Masado de muestras':
+        return 'Masado de muestras'
+    elif seleccion == 'Digestión acida de muestras':
+        return 'Digestión acida de muestras'
+    elif seleccion == 'Lixivición de muestras':
+        return 'Lixivición de muestras'
+    else:
+        return 'Selección desconocida'
+
 class Trabajador(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -26,7 +40,8 @@ class Trabajador(QMainWindow, Ui_MainWindow):
         self.frame_superior.mouseMoveEvent = self.mover_ventana
         self.showMaximized()
 
-        self.ElegirArt.currentIndexChanged.connect(self.elegirArt)
+        self.ElegirArt.activated.connect(self.decision)
+        self.IniciarArt()
 
 
     def control_bt_normal(self): 
@@ -62,14 +77,16 @@ class Trabajador(QMainWindow, Ui_MainWindow):
             self.bt_normal.hide()
             self.bt_maximize.show()
 
-    def abrirArt(self):
 
+    def abrirArt(self):
         self.supervisor = ART()
 
-    def elegirArt(self,index):
-        artElegido = self.ElegirArt.itemText(index)
+    def decision(self):
+        seleccion = self.ElegirArt.currentText()
+        resultado = procesarSeleccion(seleccion)
+        print(resultado)
 
-    def iniciarArt(self):
+    def IniciarArt(self):
         self.iniciarArt.clicked.connect(self.abrirArt)
 
 if __name__ == "__main__":

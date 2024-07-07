@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QLineEdit
 from GUI.ui_inicioSesion import Ui_MainWindow
+from PyQt6.QtCore import Qt
 from PyQt6 import QtCore, QtWidgets
 from GUI.trab import Trabajador
 from GUI.supervisor import Supervisor
@@ -66,12 +67,11 @@ class Login(QMainWindow, Ui_MainWindow):
             self.bt_normal.hide()
             self.bt_maximize.show()
     
-    def mostrar_contrasena(self, state):
-        if state == Qt.CheckState.Checked:
-            self.lineEdit_2.setEchoMode(QLineEdit.EchoMode.Normal)
+    def mostrar_contrasena(self, clicked):
+        if clicked:
+            self.contraUser.setEchoMode(QLineEdit.EchoMode.Normal)
         else:
-            self.lineEdit_2.setEchoMode(QLineEdit.EchoMode.Password)
-
+            self.contraUser.setEchoMode(QLineEdit.EchoMode.Password)
 
     def ingresartrab(self):
         if self.rutUser.text() == "":
