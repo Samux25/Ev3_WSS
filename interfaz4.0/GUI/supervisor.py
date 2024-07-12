@@ -1,3 +1,7 @@
+import sys
+#sys.path.append("D:/Codigos/Python Desarrollo/Ev3_WSS/Control")
+sys.path.append("C:/taller/WSS/Control") #Ruta tito
+from CTRR import *
 from PyQt6.QtWidgets import QMainWindow
 from GUI.ui_supervisor import Ui_MainWindow
 from PyQt6 import QtCore, QtWidgets
@@ -6,7 +10,7 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QPointF
 
 class Supervisor(QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self, datos):
         super().__init__()
         self.setupUi(self)
         self.bt_normal.hide()
@@ -23,7 +27,12 @@ class Supervisor(QMainWindow, Ui_MainWindow):
         self.grip = QtWidgets.QSizeGrip(self)
         self.grip.resize(self.gripSize, self.gripSize)
         self.frame_superior.mouseMoveEvent = self.mover_ventana
-        self.showMaximized()
+        self.contr = Controlador()
+        self.NombreSuper.setText(datos[0])
+        self.DireccionSuper.setText(datos[1])
+        self.TelefonoSuper.setText(datos[2])
+        self.CorreoSuper.setText(datos[3])
+        self.show()
 
     def control_bt_normal(self): 
         self.showNormal()

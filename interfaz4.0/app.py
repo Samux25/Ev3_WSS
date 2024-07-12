@@ -7,4 +7,4 @@ class wss():
         app = QApplication([])
         window = Login()
         window.show()
-        app.exec()
+        app.exec() 

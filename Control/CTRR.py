@@ -1,11 +1,31 @@
 import sys 
-sys.path.append("C:/Ev3_WSS/Ev3_WSS")
-from Model.objDTO import *
-from Model.objDAO import *
+#sys.path.append("D:/Codigos/Python Desarrollo/Ev3_WSS/Model")
+sys.path.append("C:/taller/WSS/Model") #Ruta Tito
+from objDTO import *
+from objDAO import *
 
 class Controlador: 
     def __init__(self):
         self.BD = BD_WSS()
+    
+    def inicioSesion(self,rut,ctr):
+        ltsIn = []
+        verificacion = self.validarRut(rut)
+        if verificacion == "Si":
+            buena = self.BD.buscarContraseña(rut)
+            cargo = self.BD.buscarCargo(rut)
+            if ctr == buena:
+                msg = "Sesion Iniciada Correctamente"
+                puesto = cargo
+                ltsIn.append(msg)
+                ltsIn.append(puesto)
+            else:
+                msg = "La credencial ingresada no es valida"
+                ltsIn.append(msg)
+        else: 
+            msg = "La Credencial ingresada no es valida"
+            ltsIn.append(msg)
+        return ltsIn
     
     def validarFecha(self,fecha):
         resultado = self.BD.buscarFecha(fecha)
@@ -37,7 +57,7 @@ class Controlador:
         else: 
             msg = 'No hay ninguna ART creada en esa fecha'
         return msg
-
+        
     def sacarIdActividad(self,actividad):
         return self.BD.sacarIdActividad(actividad)
 
@@ -74,10 +94,24 @@ class Controlador:
     def actualizarInformacion(self,rut,campo,dato):
         verificacion = self.validarRut(rut)
         if verificacion == "Si":
-            self.BD.actualizarDatos()
+            self.BD.actualizarDatos(campo,dato)
             msg = 'Datos Actualizados Correctamente'
         else:
             msg = 'La Credencial ingresada no es valida'
         return msg
-
-C = Controlador()
+    
+    def visualizarEmpleadoRut(self,rut):
+        verificacion = self.validarRut(rut)
+        if verificacion == "Si":
+            datos = self.BD.visualizarEmpleadoRut(rut)
+        else : 
+            datos = "No se puede cargar la informacion"
+        return datos
+    
+    def visualizarRiesgoActividad(self,nombre):
+        resultado = self.BD.visualizarRiesgoActividad(nombre)
+        return resultado
+    
+    def visualizarControlRiesgo(self,nombre):
+        resultado = self.BD.visualizarControlRiesgo(nombre)
+        return resultado

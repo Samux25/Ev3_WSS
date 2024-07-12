@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QPointF
 
 class ART(QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self,datos, riesgoCrit,controlRiesgo):
         super().__init__()
         self.setupUi(self)
         self.bt_normal.hide()
@@ -23,7 +23,47 @@ class ART(QMainWindow, Ui_MainWindow):
         self.grip = QtWidgets.QSizeGrip(self)
         self.grip.resize(self.gripSize, self.gripSize)
         self.frame_superior.mouseMoveEvent = self.mover_ventana
-        self.showMaximized()
+        self.NombreActividad.setText(riesgoCrit[0])
+        self.nombreRiesgo1.setText(riesgoCrit[2])
+        self.nombreRiesgo2.setText(riesgoCrit[4])
+        self.NumCod1.setText(riesgoCrit[1])
+        self.NumCod2.setText(riesgoCrit[3])
+        self.mostrarOtroRiesgo.setText(controlRiesgo[0])
+        self.mostrarMedidasControl.setText(controlRiesgo[1])
+        self.CargoTrab.setText("")
+        self.nombreTrab.setText(datos[0])
+        self.show()
+        
+        self.respuesta_PT1 = None
+        self.respuesta_PT2 = None
+        self.respuesta_PT3 = None
+        self.respuesta_PT4 = None
+        self.respuesta_PT5 = None
+        self.respuesta_PT6 = None
+
+        self.respuesta_Rc1Pr1 = None
+        self.respuesta_Rc1Pr2 = None
+        self.respuesta_Rc1Pr3 = None
+        self.respuesta_Rc1Pr4 = None
+        self.respuesta_Rc1Pr5 = None
+        self.respuesta_Rc1Pr6 = None
+        self.respuesta_Rc1Pr5 = None
+        self.respuesta_Rc1Pr6 = None
+
+        self.respuesta_Rc2Pr1 = None
+        self.respuesta_Rc2Pr2 = None
+        self.respuesta_Rc2Pr3 = None
+        self.respuesta_Rc2Pr4 = None
+        self.respuesta_Rc2Pr5 = None
+        self.respuesta_Rc2Pr6 = None
+        self.respuesta_Rc2Pr5 = None
+        self.respuesta_Rc2Pr6 = None
+
+        self.respuesta_trabSimult = None
+        self.respuesta_CoordLider = None
+        self.respuesta_VerifCCritic = None
+        self.respuesta_TSVerificado = None
+        self.respuesta_confirCondicion = None
 
         self.PT1_si.clicked.connect(self.pregunta1)
         self.PT1_no.clicked.connect(self.pregunta1)
@@ -37,14 +77,6 @@ class ART(QMainWindow, Ui_MainWindow):
         self.PT5_no.clicked.connect(self.pregunta5)
         self.PT6_si.clicked.connect(self.pregunta6)
         self.PT6_no.clicked.connect(self.pregunta6)
-
-
-        self.respuesta_PT1 = None
-        self.respuesta_PT2 = None
-        self.respuesta_PT3 = None
-        self.respuesta_PT4 = None
-        self.respuesta_PT5 = None
-        self.respuesta_PT6 = None
 
         self.Rc1Pr1_si.clicked.connect(self.RiesgCrit1Pr1)
         self.Rc1Pr1_no.clicked.connect(self.RiesgCrit1Pr1)
@@ -94,30 +126,6 @@ class ART(QMainWindow, Ui_MainWindow):
 
         self.confirCondicion_si.clicked.connect(self.condicionFisica)
         self.confirCondicion_no.clicked.connect(self.condicionFisica)
-
-        self.respuesta_trabSimult = None
-        self.respuesta_CoordLider = None
-        self.respuesta_VerifCCritic = None
-        self.respuesta_TSVerificado = None
-        self.respuesta_confirCondicion = None
-
-        self.respuesta_Rc2Pr1 = None
-        self.respuesta_Rc2Pr2 = None
-        self.respuesta_Rc2Pr3 = None
-        self.respuesta_Rc2Pr4 = None
-        self.respuesta_Rc2Pr5 = None
-        self.respuesta_Rc2Pr6 = None
-        self.respuesta_Rc2Pr5 = None
-        self.respuesta_Rc2Pr6 = None
-
-        self.respuesta_Rc1Pr1 = None
-        self.respuesta_Rc1Pr2 = None
-        self.respuesta_Rc1Pr3 = None
-        self.respuesta_Rc1Pr4 = None
-        self.respuesta_Rc1Pr5 = None
-        self.respuesta_Rc1Pr6 = None
-        self.respuesta_Rc1Pr5 = None
-        self.respuesta_Rc1Pr6 = None
 
 
     def control_bt_normal(self): 

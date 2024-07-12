@@ -6,29 +6,37 @@ class BD_WSS:
             host='localhost',
             user='root',
             password='',
-            db='wss_db4')
+            db='wss')
         self.cursor = self.conector.cursor()
+    
+    def buscarContraseña(self,rut):
+        sql = "SELECT contraseña FROM empleado WHERE rut = '"+rut+"'"
+        try: 
+            self.cursor.execute(sql)
+            Contraseña = self.cursor.fetchone()
+            if Contraseña != None:
+                msg = Contraseña[0]
+            else:
+                msg = "Las credenciales son incorrectas"
+        except Exception as ex:
+            msg = "Error: " +str(ex.args)
+        return msg
 
-    def login(self, objDTO: empleado):
-        sql = """SELECT * FROM empleado WHERE cargo=%s AND rut=%s AND contraseña=%s"""
-        self.cursor.execute(sql, ("Trabajador", objDTO.getRut2(), objDTO.getContrasena2()))
-        fila = self.cursor.fetchone()
-        if fila:
-            user = empleado(Cargo=fila[0], Rut=fila[1], Contrasena=fila[2])
-            return user
-        return None
-
-    def loginSuper(self, objDTO: empleado):
-        sql = """SELECT * FROM empleado WHERE cargo=%s AND rut=%s AND contraseña=%s"""
-        self.cursor.execute(sql, ("Supervisor", objDTO.getRut2(), objDTO.getContrasena2()))
-        fila = self.cursor.fetchone()
-        if fila:
-            user = empleado(Cargo=fila[0], Rut=fila[1], Contrasena=fila[2])
-            return user
-        return None
+    def buscarCargo(self,rut):
+        sql = "SELECT cargo FROM empleado WHERE rut = '"+rut+"'"
+        try: 
+            self.cursor.execute(sql)
+            Cargo = self.cursor.fetchone()
+            if Cargo != None:
+                msg = Cargo[0]
+            else:
+                msg = "Las credenciales son incorrectas"
+        except Exception as ex:
+            msg = "Error: " +str(ex.args)
+        return msg
 
     def buscarRut(self,rut):
-        sql = "SELECT rut From empleado WHERE rut = '"+rut+"'"
+        sql = "SELECT rut FROM empleado WHERE rut = '"+rut+"'"
         try:
             self.cursor.execute(sql)
             Empleado = self.cursor.fetchone()
@@ -41,7 +49,7 @@ class BD_WSS:
         return msg
 
     def buscarFecha(self,fecha):
-        sql = "SELECT fecha From ver_arts WHERE fecha = '"+fecha+"'"
+        sql = "SELECT fecha FROM ver_arts WHERE fecha = '"+fecha+"'"
         try:
             self.cursor.execute(sql)
             fechas = self.cursor.fetchall()
@@ -237,3 +245,56 @@ class BD_WSS:
         except Exception as ex:
             msg =  "Error: " + str(ex.args)
         return msg 
+    
+    def visualizarEmpleadoRut(self,rut):
+        datos = []
+        sql = "SELECT nombre_completo, direccion_residencia, telefono, correo FROM empleado WHERE rut = '"+rut+"'"
+        try : 
+            self.cursor.execute(sql)
+            Empleado = self.cursor.fetchone()
+            if Empleado != None:
+                datos.append(Empleado[0])
+                datos.append(Empleado[1])
+                datos.append(Empleado[2])
+                datos.append(Empleado[3])
+        except Exception as ex:
+            msg  = "Error: " + str(ex.args)
+            datos.append(msg)
+        return datos
+    
+    def visualizarRiesgoActividad(self, nombre):
+        datoRiesgo = []
+        sql = "SELECT actividad.nombre, GROUP_CONCAT(posee.id_riesgoCritico ORDER BY posee.id_riesgoCritico) AS riesgos_criticos, GROUP_CONCAT(riesgocritico.nombre ORDER BY posee.id_riesgoCritico) AS nombres_riesgos FROM posee INNER JOIN actividad ON posee.id_actividad = actividad.id_actividad INNER JOIN riesgocritico ON posee.id_riesgoCritico = riesgocritico.id_riesgoCritico WHERE actividad.nombre = '"+nombre+"' GROUP BY actividad.nombre"
+        try:
+            self.cursor.execute(sql)
+            riesgoCritico = self.cursor.fetchone()
+            if riesgoCritico is not None:
+                datoRiesgo.append(riesgoCritico[0])
+                idRiesgosCriticos = riesgoCritico[1]
+                nombresRiesgosCriticos = riesgoCritico[2]
+                if idRiesgosCriticos:
+                    ids = idRiesgosCriticos.split(',')
+                    nombres = nombresRiesgosCriticos.split(',')
+                    for idRiesgo, nombreRiesgo in zip(ids, nombres):
+                        datoRiesgo.extend([idRiesgo, nombreRiesgo])
+                    while len(datoRiesgo) < 4:
+                        datoRiesgo.extend(['', ''])
+        except Exception as ex:
+            msg = "Error: " + str(ex.args)
+            datoRiesgo.append(msg)
+        
+        return datoRiesgo
+    
+    def visualizarControlRiesgo(self, nombre):
+        controlRiesgo = []
+        sql= "SELECT riesgo, medida_control FROM actividad WHERE  nombre= '"+nombre+"'"
+        try : 
+            self.cursor.execute(sql)
+            riesgoControl= self.cursor.fetchone()
+            if riesgoControl != None:
+                controlRiesgo.append(riesgoControl[0])
+                controlRiesgo.append(riesgoControl[1])
+        except Exception as ex:
+            msg  = "Error: " + str(ex.args)
+            controlRiesgo.append(msg)
+        return controlRiesgo

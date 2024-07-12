@@ -1,23 +1,22 @@
 import sys
-sys.path.append("C:/Ev3_WSS/Ev3_WSS/Model")
+#sys.path.append("D:/Codigos/Python Desarrollo/Ev3_WSS/Control")
+sys.path.append("C:/taller/WSS/Control") #Ruta tito
+from CTRR import * 
 from PyQt6.QtWidgets import QMainWindow, QLineEdit
 from GUI.ui_inicioSesion import Ui_MainWindow
 from PyQt6.QtCore import Qt
 from PyQt6 import QtCore, QtWidgets
 from GUI.trab import Trabajador
 from GUI.supervisor import Supervisor
-#from data.usuario import userData
-
-from objDAO import BD_WSS
-from objDTO import empleado
-
-#from model.user import empleado
 from PyQt6.QtCore import Qt, QPointF
 
 class Login(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.rutUser.setFocus()
+        self.rutUser.returnPressed.connect(self.contraUser.setFocus)
+        self.contraUser.returnPressed.connect(self.iniciarSesion.click)
         self.bt_normal.hide()
         self.click_posicion = None
         self.bt_minimize.clicked.connect(lambda: self.showMinimized())
@@ -34,9 +33,8 @@ class Login(QMainWindow, Ui_MainWindow):
         self.grip = QtWidgets.QSizeGrip(self)
         self.grip.resize(self.gripSize, self.gripSize)
         self.frame_superior.mouseMoveEvent = self.mover_ventana
+        self.contr = Controlador()
         self.InicioSesion()
-        self.InicioSesion2()
-        self.lblmss.setText("")
         self.show()
 
 
@@ -79,7 +77,7 @@ class Login(QMainWindow, Ui_MainWindow):
         else:
             self.contraUser.setEchoMode(QLineEdit.EchoMode.Password)
 
-    def ingresartrab(self):
+    def ingresar(self):
         if self.rutUser.text() == "":
             self.lblmss.setText("Ingrese su RUT")
             self.rutUser.setFocus()
@@ -88,37 +86,21 @@ class Login(QMainWindow, Ui_MainWindow):
             self.contraUser.setFocus()
         else:
             self.lblmss.setText("")
-            usu = empleado(Rut=self.rutUser.text(),Contrasena=self.contraUser.text())
-            usuData = BD_WSS()
-            res = usuData.login(usu)
-            if res:
-                self.lblmss.setText("Iniciando sesion")
-                self.trabajador = Trabajador()
+            rut = self.rutUser.text()
+            contraseña = self.contraUser.text()
+            usurio = self.contr.inicioSesion(rut,contraseña)
+            if usurio[1] == "Trabajador":
+                self.lblmss.setText(usurio[0])
+                datos = self.contr.visualizarEmpleadoRut(rut)
+                Trabajador(datos)
+                self.hide()
+            elif usurio[1] == "Supervisor":
+                self.lblmss.setText(usurio[0])
+                datos = self.contr.visualizarEmpleadoRut(rut)
+                Supervisor(datos)
                 self.hide()
             else:
-                self.lblmss.setText("Datos Incorrectos")
-
-    def ingresarSuper(self):
-        if self.rutUser.text() == "":
-            self.lblmss.setText("Ingrese su RUT")
-            self.rutUser.setFocus()
-        elif self.contraUser.text() == "":
-            self.lblmss.setText("Ingrese su contraseña")
-            self.contraUser.setFocus()
-        else:
-            self.lblmss.setText("")
-            usu = empleado(Rut=self.rutUser.text(),Contrasena=self.contraUser.text())
-            usuData = BD_WSS()
-            res = usuData.loginSuper(usu)
-            if res:
-                self.lblmss.setText("Iniciando sesion")
-                self.supervisor = Supervisor()
-                self.hide()
-            else:
-                self.lblmss.setText("Datos Incorrectos")
+                self.lblmss.setText(usurio[0])
 
     def InicioSesion(self):
-        self.iniciarSesion.clicked.connect(self.ingresartrab)
-
-    def InicioSesion2(self):
-        self.iniciarSesion.clicked.connect(self.ingresarSuper)
+        self.iniciarSesion.clicked.connect(self.ingresar)

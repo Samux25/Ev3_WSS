@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 1240, 2824))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 1236, 3079))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.horizontalLayout_47 = QtWidgets.QHBoxLayout(self.scrollAreaWidgetContents_2)
         self.horizontalLayout_47.setObjectName("horizontalLayout_47")
@@ -114,6 +114,17 @@ class Ui_MainWindow(object):
         self.frame_5.setObjectName("frame_5")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_5)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.NombreActividad = QtWidgets.QLabel(parent=self.frame_5)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.NombreActividad.setFont(font)
+        self.NombreActividad.setStyleSheet("\n"
+"border-color: transparent;")
+        self.NombreActividad.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.NombreActividad.setObjectName("NombreActividad")
+        self.verticalLayout_5.addWidget(self.NombreActividad)
         self.frame_6 = QtWidgets.QFrame(parent=self.frame_5)
         self.frame_6.setMaximumSize(QtCore.QSize(16777215, 50))
         self.frame_6.setStyleSheet("background-color: rgb(148, 148, 148);\n"
@@ -1433,6 +1444,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "ART"))
+        self.NombreActividad.setText(_translate("MainWindow", "NOMBRE ACTIVIDAD"))
         self.label_2.setText(_translate("MainWindow", "Preguntas transversales "))
         self.label_16.setText(_translate("MainWindow", "¿Conozco el estandar, procedimiento y/o instructivo del trabajo que ejecutare?"))
         self.PT1_si.setText(_translate("MainWindow", "SI"))
@@ -1545,3 +1557,12 @@ class Ui_MainWindow(object):
         self.FirmaTrab.setText(_translate("MainWindow", "Ingresa la firma del Trabajador "))
         self.label_43.setText(_translate("MainWindow", "<html><head/><body><p>Listado de contextos de trabajo </p><p>simultaneo por trabajo a realizar:</p></body></html>"))
 
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec())
