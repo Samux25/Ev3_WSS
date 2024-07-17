@@ -5,13 +5,13 @@ from CTRR import *
 from PyQt6.QtWidgets import QMainWindow
 from GUI.ui_trabajador import Ui_MainWindow
 from GUI.Art import ART
+from GUI.cambioDatos import cambioDatos
 from PyQt6 import QtCore, QtWidgets
-
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QPointF
 
 class Trabajador(QMainWindow, Ui_MainWindow):
-    def __init__(self,datos):
+    def __init__(self,rut, datos):
         super().__init__()
         self.setupUi(self)
         self.bt_normal.hide()
@@ -28,18 +28,18 @@ class Trabajador(QMainWindow, Ui_MainWindow):
         self.grip = QtWidgets.QSizeGrip(self)
         self.grip.resize(self.gripSize, self.gripSize)
         self.frame_superior.mouseMoveEvent = self.mover_ventana
+
         self.contr = Controlador()
-        self.show()
-
-        self.resultado = None
-        self.datos = datos
-
-
         self.NombreTrab.setText(datos[0])
         self.DireccionTrab.setText(datos[1])
         self.TelefonoTrab.setText(datos[2])
         self.CorreoTrab.setText(datos[3])
+        self.datos = datos
+        self.rut = rut
+        self.show()
 
+        self.CambiarInfoTrab.clicked.connect(self.abrirCambioDatos)
+        self.resultado = ""
         self.ElegirArt.activated.connect(self.decision)
         self.IniciarArt()
 
@@ -78,33 +78,37 @@ class Trabajador(QMainWindow, Ui_MainWindow):
             self.bt_maximize.show()
 
     def procesarSeleccion(self, seleccion):
-        if seleccion == 'Lavado de material':
-            return 'Lavado de material'
-        elif seleccion == 'Lecturas en equipo de A.A.':
-            return 'Lectura de muestras por absorcion.' #Lecturas en equipo de A.A.
-        elif seleccion == 'Masado de muestras':
-            return 'Masado de muestras'
-        elif seleccion == 'Digestión acida de muestras':
-            return 'Digestión acida'
-        elif seleccion == 'Lixivición de muestras':
-            return 'Lixiviaxión'
+        if seleccion == "Lavado de material":
+            return "Lavado de material"
+        elif seleccion == "Lecturas en equipo de A.A":
+            return "Lecturas en equipo de A.A"
+        elif seleccion == "Masado de muestras":
+            return "Masado de muestras"
+        elif seleccion == "Digestión acida de muestras":
+            return "Digestión acida de muestras"
+        elif seleccion == "Lixiviaxión de muestras":
+            return "Lixiviaxión de muestras"
         else:
-            return 'Selección desconocida'
+            return "Selección desconocida"
 
     def decision(self):
         seleccion = self.ElegirArt.currentText()
         self.resultado = self.procesarSeleccion(seleccion)
 
     def abrirArt(self):
-        resultado = self.resultado
-        datos = self.datos
-        riesgoCrit = self.contr.visualizarRiesgoActividad(resultado)
-        controlRiesgo = self.contr.visualizarControlRiesgo(resultado)
-        self.supervisor = ART(datos, riesgoCrit,controlRiesgo)
+        riesgoCrit = self.contr.visualizarRiesgoActividad(self.resultado)
+        print(self.resultado)
+        print(riesgoCrit)
+        controlRiesgo = self.contr.visualizarControlRiesgo(self.resultado)
+        ART(self.datos, riesgoCrit, controlRiesgo)
         self.hide()
 
     def IniciarArt(self):
         self.iniciarArt.clicked.connect(self.abrirArt)
+
+    def abrirCambioDatos(self):
+        cambioDatos(self.rut, self.datos)
+        self.hide()
 
 if __name__ == "__main__":
         app = QApplication([])

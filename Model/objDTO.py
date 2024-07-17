@@ -1,11 +1,12 @@
 class Empleado:
-    def __init__(self,Rut,NombreCompleto,Correo,Telefono,DireccionResidencia,Cargo, Contraseña):
+    def __init__(self,Rut,NombreCompleto,Correo,Telefono,DireccionResidencia,Cargo,especialidad, Contraseña):
         self.__Rut = Rut
         self.__NombreCompleto = NombreCompleto
         self.__Correo = Correo
         self.__Telefono = Telefono
         self.__DireccionResidencia = DireccionResidencia
         self.__Cargo = Cargo
+        self.__especialidad = especialidad
         self.__Contraseña = Contraseña
 
     def getRut(self):
@@ -25,6 +26,9 @@ class Empleado:
     
     def getCargo(self):
         return self.__Cargo
+
+    def getEspecialidad(self):
+        return self.__especialidad
 
     def getContraseña(self):
         return self.__Contraseña
@@ -47,6 +51,9 @@ class Empleado:
 
     def setCargo(self,nuevoCargo):
         self.__Cargo = nuevoCargo
+
+    def setEspecialidad(self,nuevaEspecialidad):
+        self.__especialidad = nuevaEspecialidad
 
     def setContraseña(self,nuevaContraseña):
         self.__Contraseña = nuevaContraseña
@@ -83,17 +90,13 @@ class ART:
         self.__HoraTermino = nuevaHoraTermino
 
 class Actividad: 
-    def __init__(self,nombre,descripcion,riesgo,medidaControl):
+    def __init__(self,nombre,riesgo,medidaControl):
         self.__Nombre = nombre
-        self.__Descripcion = descripcion
         self.__Riesgo = riesgo
         self.__MedidaControl = medidaControl
 
     def getNombre(self):
         return self.__Nombre
-    
-    def getDescripcion(self):
-        return self.__Descripcion
     
     def getRiesgo(self):
         return self.__Riesgo
@@ -104,16 +107,13 @@ class Actividad:
     def setNombre(self,nuevoNombre):
         self.__Nombre = nuevoNombre
     
-    def setDescripcion(self,nuevaDescripcion):
-        self.__Descripcion = nuevaDescripcion
-    
     def setRiesgo(self,nuevoRiesgo):
         self.__Riesgo = nuevoRiesgo
     
     def setMedidaControl(self,nuevaMedida):
         self.__MedidaControl = nuevaMedida
 
-class Riego_critico:
+class Riegocritico:
     def __init__(self, nombre,pregunta,respuestaCorrecta):
         self.__Nombre = nombre
         self.__Pregunta = pregunta

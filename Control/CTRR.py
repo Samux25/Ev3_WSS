@@ -94,7 +94,7 @@ class Controlador:
     def actualizarInformacion(self,rut,campo,dato):
         verificacion = self.validarRut(rut)
         if verificacion == "Si":
-            self.BD.actualizarDatos(campo,dato)
+            self.BD.actualizarDatos(rut,campo,dato)
             msg = 'Datos Actualizados Correctamente'
         else:
             msg = 'La Credencial ingresada no es valida'
@@ -115,3 +115,26 @@ class Controlador:
     def visualizarControlRiesgo(self,nombre):
         resultado = self.BD.visualizarControlRiesgo(nombre)
         return resultado
+    
+    def sacarNumeroPreguntas(self,nombre):
+        resultado = self.BD.sacarNumeroPreguntas(nombre)
+        return resultado
+    
+    def mostrarTrabajadores(self):
+        resultado = self.BD.mostrarTrabajadores()
+        return resultado
+    
+    def mostrarARTCreadas(self):
+        resultado = self.BD.mostrarARTCreadas()
+        return resultado
+    
+    def mostrarARTporActividad(self,nombre):
+        resultados = self.BD.mostrarARTporActividad(nombre)
+        return resultados
+    
+    def mostrarSuper(self):
+        resultados = self.BD.mostrarSuper()
+        return resultados
+
+c = Controlador()
+print(c.mostrarSuper())

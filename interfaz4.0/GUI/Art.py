@@ -1,3 +1,6 @@
+import sys
+sys.path.append("C:/taller/WSS/Control") #Ruta Tito
+from CTRR import * 
 from PyQt6.QtWidgets import QMainWindow
 from GUI.ui_ART import Ui_MainWindow
 from PyQt6 import QtCore, QtWidgets
@@ -23,6 +26,20 @@ class ART(QMainWindow, Ui_MainWindow):
         self.grip = QtWidgets.QSizeGrip(self)
         self.grip.resize(self.gripSize, self.gripSize)
         self.frame_superior.mouseMoveEvent = self.mover_ventana
+        self.contr = Controlador()
+        self.datos = datos
+        self.riesgoCrit = riesgoCrit
+        if riesgoCrit[1] == '6':
+            self.RC1PR6.setVisible(False)
+            self.RC1PR7.setVisible(False)
+            self.RC1PR8.setVisible(False)
+        if riesgoCrit[3] == '7':
+            self.RC2PR8.setVisible(False)
+        elif riesgoCrit[3] == (''):
+            self.frame_27.setVisible(False)
+        else:
+            self.frame_27.setVisible(True)
+
         self.NombreActividad.setText(riesgoCrit[0])
         self.nombreRiesgo1.setText(riesgoCrit[2])
         self.nombreRiesgo2.setText(riesgoCrit[4])
@@ -30,10 +47,18 @@ class ART(QMainWindow, Ui_MainWindow):
         self.NumCod2.setText(riesgoCrit[3])
         self.mostrarOtroRiesgo.setText(controlRiesgo[0])
         self.mostrarMedidasControl.setText(controlRiesgo[1])
-        self.CargoTrab.setText("")
+        self.CargoTrab.setText(datos[4])
         self.nombreTrab.setText(datos[0])
+        self.terminarART.clicked.connect(self.EndART)
+        self.nombreSuper()
         self.show()
-        
+
+        self.respuestasPt = []
+        self.respuestasRc1 =[]
+        self.respuestasRc2 =[]
+
+        self.respuestaTurno = None
+
         self.respuesta_PT1 = None
         self.respuesta_PT2 = None
         self.respuesta_PT3 = None
@@ -47,8 +72,8 @@ class ART(QMainWindow, Ui_MainWindow):
         self.respuesta_Rc1Pr4 = None
         self.respuesta_Rc1Pr5 = None
         self.respuesta_Rc1Pr6 = None
-        self.respuesta_Rc1Pr5 = None
-        self.respuesta_Rc1Pr6 = None
+        self.respuesta_Rc1Pr7 = None
+        self.respuesta_Rc1Pr8 = None
 
         self.respuesta_Rc2Pr1 = None
         self.respuesta_Rc2Pr2 = None
@@ -56,14 +81,17 @@ class ART(QMainWindow, Ui_MainWindow):
         self.respuesta_Rc2Pr4 = None
         self.respuesta_Rc2Pr5 = None
         self.respuesta_Rc2Pr6 = None
-        self.respuesta_Rc2Pr5 = None
-        self.respuesta_Rc2Pr6 = None
+        self.respuesta_Rc2Pr7 = None
+        self.respuesta_Rc2Pr8 = None
 
         self.respuesta_trabSimult = None
         self.respuesta_CoordLider = None
         self.respuesta_VerifCCritic = None
         self.respuesta_TSVerificado = None
         self.respuesta_confirCondicion = None
+
+        self.dia.clicked.connect(self.turno)
+        self.noche.clicked.connect(self.turno)
 
         self.PT1_si.clicked.connect(self.pregunta1)
         self.PT1_no.clicked.connect(self.pregunta1)
@@ -160,6 +188,18 @@ class ART(QMainWindow, Ui_MainWindow):
             self.showNormal()
             self.bt_normal.hide()
             self.bt_maximize.show()
+
+    def nombreSuper(self):
+        empleados = self.contr.mostrarSuper()
+        for empleado in empleados:
+            self.nombresSuper.addItem(empleado)
+
+    def turno(self):
+        if self.sender() == self.dia:
+            self.respuestaTurno = '08:00:00'
+        elif self.sender() == self.noche:
+            self.respuestaTurno = '20:00:00'
+        print(f"Pregunta 1: {self.respuesta_PT1}")
 
     def pregunta1(self):
         if self.sender() == self.PT1_si:
@@ -321,42 +361,76 @@ class ART(QMainWindow, Ui_MainWindow):
 
     def trabSimultaneo(self):
         if self.sender() == self.trabSimult_si:
-            self.respuesta_trabSimult = "SI"
+            self.respuesta_trabSimult = 1
         elif self.sender() == self.trabSimult_no:
             self.respuesta_trabSimult = "NO"
         print(f"respuesta_trabSimult: {self.respuesta_trabSimult}")
 
     def coordinLider(self):
         if self.sender() == self.CoordLider_si:
-            self.respuesta_CoordLider = "SI"
+            self.respuesta_CoordLider = 1
         elif self.sender() == self.CoordLider_no:
             self.respuesta_CoordLider = "NO"
         print(f"respuesta_CoordLider: {self.respuesta_CoordLider}")
 
     def verifCCr(self):
         if self.sender() == self.VerifCCritic_si:
-            self.respuesta_VerifCCritic = "SI"
+            self.respuesta_VerifCCritic = 1
         elif self.sender() == self.VerifCCritic_no:
             self.respuesta_VerifCCritic = "NO"
         print(f"respuesta_VerifCCritic: {self.respuesta_VerifCCritic}")
         
     def verifTrab(self):
         if self.sender() == self.TSVerificado_si:
-            self.respuesta_TSVerificado = "SI"
+            self.respuesta_TSVerificado = 1
         elif self.sender() == self.TSVerificado_no:
             self.respuesta_TSVerificado = "NO"
         print(f"respuesta_TSVerificado: {self.respuesta_TSVerificado}")
 
     def condicionFisica(self):
         if self.sender() == self.confirCondicion_si:
-            self.respuesta_confirCondicion = "SI"
+            self.respuesta_confirCondicion = 1
         elif self.sender() == self.confirCondicion_no:
             self.respuesta_confirCondicion = "NO"
         print(f"respuesta_confirCondicion: {self.respuesta_confirCondicion}")
 
-
-if __name__ == "__main__":
-        app = QApplication([])
-        window = ART()
-        window.show()
-        app.exec()
+    def EndART(self):
+        nPreguntasR1 = self.contr.sacarNumeroPreguntas(self.riesgoCrit[2])
+        self.respuestasPt.append(self.respuesta_PT1)
+        self.respuestasPt.append(self.respuesta_PT2)
+        self.respuestasPt.append(self.respuesta_PT3)
+        self.respuestasPt.append(self.respuesta_PT4)
+        self.respuestasPt.append(self.respuesta_PT5)
+        self.respuestasPt.append(self.respuesta_PT6)
+        self.respuestasRc1.append(self.respuesta_Rc1Pr1)
+        self.respuestasRc1.append(self.respuesta_Rc1Pr2)
+        self.respuestasRc1.append(self.respuesta_Rc1Pr3)
+        self.respuestasRc1.append(self.respuesta_Rc1Pr4)
+        self.respuestasRc1.append(self.respuesta_Rc1Pr5)
+        if  int(nPreguntasR1) > 5:
+            self.respuestasRc1.append(self.respuesta_Rc1Pr6)
+            self.respuestasRc1.append(self.respuesta_Rc1Pr7)
+            self.respuestasRc1.append(self.respuesta_Rc1Pr8)
+        elif self.riesgoCrit[4] != '' :
+            nPreguntasR2 = self.contr.sacarNumeroPreguntas(self.riesgoCrit[4])
+            self.respuestasRc2.append(self.respuesta_Rc2Pr1)
+            self.respuestasRc2.append(self.respuesta_Rc2Pr2)
+            self.respuestasRc2.append(self.respuesta_Rc2Pr3)
+            self.respuestasRc2.append(self.respuesta_Rc2Pr4)
+            self.respuestasRc2.append(self.respuesta_Rc2Pr5)
+            self.respuestasRc2.append(self.respuesta_Rc2Pr6)
+            self.respuestasRc2.append(self.respuesta_Rc2Pr7)
+            print(self.respuestasPt)
+            print(self.respuestasRc1)
+            print(self.respuestasRc2)
+            if int(nPreguntasR2) > 7:
+                self.respuestasRc2.append(self.respuesta_Rc2Pr8)
+                print(self.respuestasPt)
+                print(self.respuestasRc1)
+                print(self.respuestasRc2)
+        else:
+            self.respuestasRc2.append(None)
+            print(self.respuestasPt)
+            print(self.respuestasRc1)
+            print(self.respuestasRc2)
+            self.contr.crearART(self.datos[0],self.respuesta_trabSimult,self.riesgoCrit[0],self.respuesta_confirCondicion,self.respuestaTurno)

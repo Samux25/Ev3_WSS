@@ -248,7 +248,7 @@ class BD_WSS:
     
     def visualizarEmpleadoRut(self,rut):
         datos = []
-        sql = "SELECT nombre_completo, direccion_residencia, telefono, correo FROM empleado WHERE rut = '"+rut+"'"
+        sql = "SELECT nombre_completo, direccion_residencia, telefono, correo, especialidad FROM empleado WHERE rut = '"+rut+"'"
         try : 
             self.cursor.execute(sql)
             Empleado = self.cursor.fetchone()
@@ -257,6 +257,7 @@ class BD_WSS:
                 datos.append(Empleado[1])
                 datos.append(Empleado[2])
                 datos.append(Empleado[3])
+                datos.append(Empleado[4])
         except Exception as ex:
             msg  = "Error: " + str(ex.args)
             datos.append(msg)
@@ -264,7 +265,7 @@ class BD_WSS:
     
     def visualizarRiesgoActividad(self, nombre):
         datoRiesgo = []
-        sql = "SELECT actividad.nombre, GROUP_CONCAT(posee.id_riesgoCritico ORDER BY posee.id_riesgoCritico) AS riesgos_criticos, GROUP_CONCAT(riesgocritico.nombre ORDER BY posee.id_riesgoCritico) AS nombres_riesgos FROM posee INNER JOIN actividad ON posee.id_actividad = actividad.id_actividad INNER JOIN riesgocritico ON posee.id_riesgoCritico = riesgocritico.id_riesgoCritico WHERE actividad.nombre = '"+nombre+"' GROUP BY actividad.nombre"
+        sql = "SELECT actividad.nombre, GROUP_CONCAT(posee.id_riesgoCritico ORDER BY posee.id_riesgoCritico), GROUP_CONCAT(riesgocritico.nombre ORDER BY posee.id_riesgoCritico) FROM posee INNER JOIN actividad ON posee.id_actividad = actividad.id_actividad INNER JOIN riesgocritico ON posee.id_riesgoCritico = riesgocritico.id_riesgoCritico WHERE actividad.nombre = '"+nombre+"'"
         try:
             self.cursor.execute(sql)
             riesgoCritico = self.cursor.fetchone()
@@ -282,7 +283,6 @@ class BD_WSS:
         except Exception as ex:
             msg = "Error: " + str(ex.args)
             datoRiesgo.append(msg)
-        
         return datoRiesgo
     
     def visualizarControlRiesgo(self, nombre):
@@ -298,3 +298,73 @@ class BD_WSS:
             msg  = "Error: " + str(ex.args)
             controlRiesgo.append(msg)
         return controlRiesgo
+    
+    def sacarNumeroPreguntas(self,Nombre):
+        sql= "SELECT pregunta FROM riesgocritico WHERE nombre= '"+Nombre+"'"
+        try:
+            self.cursor.execute(sql)
+            pregunta = self.cursor.fetchone()
+            if pregunta != None:
+                msg = str(pregunta[0])
+        except Exception as ex:
+            msg = "Error: " + str(ex.args)
+        return msg
+    
+    def mostrarTrabajadores(self):
+        listaTrabajadores = []
+        sql = "SELECT nombre_completo, rut, correo, especialidad FROM empleado WHERE cargo = 'Trabajador'"
+        try:
+            self.cursor.execute(sql)
+            resultados = self.cursor.fetchall()
+            if resultados:
+                for registro in resultados:
+                    listaTrabajadores.append((registro[0], registro[1], registro[2], registro[3]))
+                return listaTrabajadores
+            else:
+                return []
+        except Exception as ex:
+            print("Error: " + str(ex.args))
+            return []
+
+    def mostrarARTCreadas(self):
+        listaART = []
+        sql = "SELECT empleado.nombre_completo, empleado.rut, actividad.nombre, realiza.fecha, art.hora_inicio, art.hora_termino FROM realiza JOIN empleado ON realiza.rut = empleado.rut JOIN art ON realiza.id_ART = art.id_ART JOIN actividad ON art.id_actividad = actividad.id_actividad"
+        try:
+            self.cursor.execute(sql)
+            resultados = self.cursor.fetchall()
+            if resultados:
+                for registro in resultados:
+                    listaART.append((registro[0], registro[1], registro[2], str(registro[3]), str(registro[4]), str(registro[5])))
+                return listaART
+            else:
+                return []
+        except Exception as ex:
+            print("Error: " + str(ex.args))
+            return []
+        
+    def mostrarARTporActividad(self,nombre):
+        listaporActividad = []
+        sql = "SELECT empleado.nombre_completo, actividad.nombre, art.trabajo_simultaneo, art.estado_trabajador FROM art JOIN realiza ON art.id_ART = realiza.id_ART JOIN empleado ON realiza.rut = empleado.rut JOIN actividad ON art.id_actividad = actividad.id_actividad WHERE actividad.nombre = '"+nombre+"'"
+        try:
+            self.cursor.execute(sql)
+            resultados = self.cursor.fetchall()
+            if resultados:
+                for registro in resultados:
+                    listaporActividad.append((registro[0], registro[1], str(registro[2]), str(registro[3])))
+                return listaporActividad
+            else:
+                return []
+        except Exception as ex:
+            print("Error: " + str(ex.args))
+            return []
+        
+    def mostrarSuper(self):
+        sql = "SELECT nombre_completo FROM empleado WHERE cargo ='Supervisor'"
+        try:
+            self.cursor.execute(sql)
+            resultados = self.cursor.fetchall()
+            nombres_supervisores = [fila[0] for fila in resultados]
+            return nombres_supervisores  
+        except Exception as ex:
+            msg = "Error: " + str(ex.args)
+        return msg
