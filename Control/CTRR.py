@@ -1,5 +1,6 @@
 import sys 
 #sys.path.append("D:/Codigos/Python Desarrollo/Ev3_WSS/Model")
+import hashlib as hs
 sys.path.append("C:/taller/WSS/Model") #Ruta Tito
 from objDTO import *
 from objDAO import *
@@ -14,7 +15,9 @@ class Controlador:
         if verificacion == "Si":
             buena = self.BD.buscarContraseña(rut)
             cargo = self.BD.buscarCargo(rut)
-            if ctr == buena:
+            cont = ctr.encode()
+            contra = hs.md5(cont).hexdigest()
+            if contra == buena:
                 msg = "Sesion Iniciada Correctamente"
                 puesto = cargo
                 ltsIn.append(msg)
@@ -33,6 +36,10 @@ class Controlador:
 
     def validarRut(self,rut):
         resultado = self.BD.buscarRut(rut)
+        return resultado
+    
+    def buscarCorreo(self,correo):
+        resultado = self.BD.buscarCorreo(correo)
         return resultado
 
     def visualizarEmpleados(self):
@@ -72,11 +79,12 @@ class Controlador:
             msg = 'ART Agregada'
         else: 
             msg =  'La Credencial Ingresada no es valida'
-
         return msg
     
-    def agregarEmpleado(self,rut,nombre,correo,telefono,direccionResidencia,cargo,contraseña):
+    def agregarEmpleado(self,rut,nombre,correo,telefono,direccionResidencia,cargo,especialidad,contraseña):
         sinRut = rut.replace(" ","")
+        ctr = contraseña.encode()
+        cont = hs.md5(ctr).hexdigest()
         if len(sinRut) <9: 
             msg = "La credencial ingresada tiene menos de 9 Caracteres"
         elif len(sinRut) >9:
@@ -84,7 +92,7 @@ class Controlador:
         else: 
             verificacion = self.validarRut(sinRut)
             if verificacion != "Si":
-                nuevo = Empleado(sinRut,nombre,correo,telefono,direccionResidencia,cargo,contraseña)
+                nuevo = Empleado(sinRut,nombre,correo,telefono,direccionResidencia,cargo,especialidad,cont)
                 self.BD.crearEmpleado(nuevo)
                 msg = "Empleado Agregado"
             else:
@@ -124,17 +132,98 @@ class Controlador:
         resultado = self.BD.mostrarTrabajadores()
         return resultado
     
-    def mostrarARTCreadas(self):
-        resultado = self.BD.mostrarARTCreadas()
+    def mostrarARTCreadas(self,supervisor):
+        resultado = self.BD.mostrarARTCreadas(supervisor)
         return resultado
     
-    def mostrarARTporActividad(self,nombre):
-        resultados = self.BD.mostrarARTporActividad(nombre)
+    def mostrarARTporActividad(self,nombre,supervisor):
+        resultados = self.BD.mostrarARTporActividad(nombre,supervisor)
         return resultados
     
     def mostrarSuper(self):
         resultados = self.BD.mostrarSuper()
         return resultados
+    
+    def mostrarRcRespuestas(self, nombre, nombre2):
+        resultados = self.BD.mostrarRcRespuestas(nombre, nombre2)
+        return resultados
+
+    def mostrarResPreguntas(self):
+        resultados = self.BD.mostrarResPreguntas()
+        return resultados
+    
+    def idUltimaARTRut(self,rut):
+        resultados = self.BD.idUltimaARTRut(rut)
+        return resultados
+    
+    def incorpora(self, id_art, id_pregunta, respuesta):
+        resultados = self.BD.incorpora(id_art, id_pregunta, respuesta)
+        return resultados
+    
+    def actualizarEstadoArt1(self,id_ART):
+        resultados = self.BD.actualizarEstadoArt1(id_ART)
+        return resultados
+    
+    def actualizarEstadoArt2(self,id_ART):
+        resultados = self.BD.actualizarEstadoArt2(id_ART)
+        return resultados
+    
+    def actualizarEstadoArt3(self,id_ART):
+        resultados = self.BD.actualizarEstadoArt3(id_ART)
+        return resultados
+    
+    def actualizarEstadoArt4(self,id_ART):
+        resultados = self.BD.actualizarEstadoArt4(id_ART)
+        return resultados
+    
+    def ingresartrabSimut(self,contexto, coordinacion, verif_control, comuni_tab, id_ART):
+        resultados = self.BD.ingresartrabSimut(contexto, coordinacion, verif_control, comuni_tab, id_ART)
+        return resultados
+    
+    def filtroRut(self,rut):
+        resultados = self.BD.filtroRut(rut)
+        return resultados
+    
+    def filtroFecha(self,supervisor,fecha):
+        resultados = self.BD.filtroFecha(supervisor,fecha)
+        return resultados
+    
+    def filtrotarjetaVerde(self,supervisor):
+        resultados = self.BD.filtrotarjetaVerde(supervisor)
+        return resultados
+    
+    def validarContraseña(self,rut ,contraseña):
+        cont = contraseña.encode()
+        ctrs = hs.md5(cont).hexdigest()
+        msg = "Valida"
+        if ctrs == self.BD.buscarContraseña(rut):
+            msg = "Valido"
+        else:
+            msg = "Invalida"
+        return msg
+
+    def cambiarContraseña(self,rut,ctr, nuevaCtrl):
+        verificacion = self.validarRut(rut)
+        cont = nuevaCtrl.encode()
+        print(cont)
+        ctrn = hs.md5(cont).hexdigest()
+        print(ctrn)
+        veriContra = self.validarContraseña(rut, ctr)
+        if verificacion == "Si":
+            if veriContra == "Valido":
+                self.BD.cambiarContraseña(ctrn,rut)
+                msg = "La Contraseña a sido cambiada Correctamente"
+            else:
+                msg = "La Credencial Ingresada no es Valida "
+        else:
+            msg = "La Credencial Ingresada no es Valida"
+        return msg
+
+    def asignarSuper(self,nombre,id_ART):
+        resultados = self.BD.asignarSuper(nombre,id_ART)
+        return resultados
+
+
 
 c = Controlador()
-print(c.mostrarSuper())
+print(c.cambiarContraseña("187697653","holaquehace","hola"))

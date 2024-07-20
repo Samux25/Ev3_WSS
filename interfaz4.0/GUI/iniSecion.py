@@ -8,6 +8,7 @@ from PyQt6.QtCore import Qt
 from PyQt6 import QtCore, QtWidgets
 from GUI.trab import Trabajador
 from GUI.supervisor import Supervisor
+from GUI.contrasena import contra
 from PyQt6.QtCore import Qt, QPointF
 
 class Login(QMainWindow, Ui_MainWindow):
@@ -35,7 +36,10 @@ class Login(QMainWindow, Ui_MainWindow):
         self.frame_superior.mouseMoveEvent = self.mover_ventana
         self.contr = Controlador()
         self.InicioSesion()
+        self.rutUser.setPlaceholderText("Ingrese su rut con codigo verificador y sin guion")
         self.show()
+
+        self.cambio.clicked.connect(self.cambioContrasena)
 
 
     def control_bt_normal(self): 
@@ -76,6 +80,10 @@ class Login(QMainWindow, Ui_MainWindow):
             self.contraUser.setEchoMode(QLineEdit.EchoMode.Normal)
         else:
             self.contraUser.setEchoMode(QLineEdit.EchoMode.Password)
+
+    def cambioContrasena(self):
+        contra()
+
 
     def ingresar(self):
         if self.rutUser.text() == "":

@@ -5,10 +5,11 @@ from CTRR import *
 from PyQt6.QtWidgets import QMainWindow
 from GUI.ui_supervisor import Ui_MainWindow
 from GUI.cambioDatos import cambioDatos
-from PyQt6.QtWidgets import QTableWidgetItem, QTableWidgetItem
+from GUI.anadirEmpleado import  anadirEmpleado
+from PyQt6.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem, QPushButton, QDateEdit
 from PyQt6 import QtCore, QtWidgets
 
-from PyQt6.QtCore import Qt, QPointF
+from PyQt6.QtCore import Qt, QPointF, QDate
 
 class Supervisor(QMainWindow, Ui_MainWindow):
     def __init__(self,rut, datos):
@@ -35,15 +36,22 @@ class Supervisor(QMainWindow, Ui_MainWindow):
         self.DireccionSuper.setText(datos[1])
         self.TelefonoSuper.setText(datos[2])
         self.CorreoSuper.setText(datos[3])
+        self.especialidadSuper.setText(datos[4])
+        self.fechaART.setDate(QDate.currentDate())
         self.show()
-
         self.cambiarInfoSuper.clicked.connect(self.abrirCambioDatos)
         self.ElegirArtSuper.activated.connect(self.decision)
         self.resultado = ""
         self.actualizarARTS.clicked.connect(self.mostrarTablaART)
+        self.actualizarARTS_2.clicked.connect(self.mostrarTablaTarjetaVerde)
         self.actualizar.clicked.connect(self.mostrarTablaTrabajadores)
         self.ElegirArtSuper.activated.connect(self.decision)
         self.ordenarActividad.clicked.connect(self.mostrarTablaArtActividad)
+        self.nuevoEmpleado.clicked.connect(self.anadirEmpleado)
+        self.ordenarRut.clicked.connect(self.mostrarTablaARTRut)
+        self.fechaART.dateChanged.connect(self.mostrarTablaARTFecha)
+        self.fechaART.setCalendarPopup(True)
+        self.riesgoCrit = None
 
         self.respuestasPS = []
         self.respuestasRc1 =[]
@@ -124,159 +132,159 @@ class Supervisor(QMainWindow, Ui_MainWindow):
         
     def pregunta1(self):
         if self.sender() == self.Ps1_si:
-            self.respuesta_PS1 = "SI"
+            self.respuesta_Ps1 = "SI"
         elif self.sender() == self.Ps1_no:
-            self.respuesta_PS1 = "NO"
-        print(f"Pregunta 1: {self.respuesta_PS1}")
+            self.respuesta_Ps1 = "NO"
+        print(f"Pregunta 1: {self.respuesta_Ps1}")
 
     def pregunta2(self):
         if self.sender() == self.Ps2_si:
-            self.respuesta_PS2 = "SI"
+            self.respuesta_Ps2 = "SI"
         elif self.sender() == self.Ps2_no:
-            self.respuesta_PS2 = "NO"
-        print(f"Pregunta 2: {self.respuesta_PS2}")
+            self.respuesta_Ps2 = "NO"
+        print(f"Pregunta 2: {self.respuesta_Ps2}")
 
     def pregunta3(self):
         if self.sender() == self.Ps3_si:
-            self.respuesta_PS3 = "SI"
+            self.respuesta_Ps3 = "SI"
         elif self.sender() == self.Ps3_no:
-            self.respuesta_PS3 = "NO"
-        print(f"Pregunta 3: {self.respuesta_PS3}")
+            self.respuesta_Ps3 = "NO"
+        print(f"Pregunta 3: {self.respuesta_Ps3}")
 
     def pregunta4(self):
         if self.sender() == self.Ps4_si:
-            self.respuesta_PS4 = "SI"
+            self.respuesta_Ps4 = "SI"
         elif self.sender() == self.Ps4_no:
-            self.respuesta_PS4 = "NO"
-        print(f"Pregunta 4: {self.respuesta_PS4}")
+            self.respuesta_Ps4 = "NO"
+        print(f"Pregunta 4: {self.respuesta_Ps4}")
 
     def pregunta5(self):
         if self.sender() == self.Ps5_si:
-            self.respuesta_PS5 = "SI"
+            self.respuesta_Ps5 = "SI"
         elif self.sender() == self.Ps5_no:
-            self.respuesta_PS5 = "NO"
-        print(f"Pregunta 5: {self.respuesta_PS5}")
+            self.respuesta_Ps5 = "NO"
+        print(f"Pregunta 5: {self.respuesta_Ps5}")
 
     def pregunta6(self):
         if self.sender() == self.Ps6_si:
-            self.respuesta_PS6 = "SI"
+            self.respuesta_Ps6 = "SI"
         elif self.sender() == self.Ps6_no:
-            self.respuesta_PS6 = "NO"
-        print(f"Pregunta 6: {self.respuesta_PS6}")
+            self.respuesta_Ps6 = "NO"
+        print(f"Pregunta 6: {self.respuesta_Ps6}")
 
 
     def RiesgCrit1Pr1(self):
         if self.sender() == self.superRc1Pr1_si:
-            self.respuesta_Rc1Pr1 = "SI"
+            self.respuesta_superRc1Pr1 = "SI"
         elif self.sender() == self.superRc1Pr1_no:
-            self.respuesta_Rc1Pr1 = "NO"
-        print(f"ResgoCrit1Pregunta 1: {self.respuesta_Rc1Pr1}")
+            self.respuesta_superRc1Pr1 = "NO"
+        print(f"ResgoCrit1Pregunta 1: {self.respuesta_superRc1Pr1}")
 
     def RiesgCrit1Pr2(self):
         if self.sender() == self.superRc1Pr2_si:
-            self.respuesta_Rc1Pr2 = "SI"
+            self.respuesta_superRc1Pr2 = "SI"
         elif self.sender() == self.superRc1Pr2_no:
-            self.respuesta_Rc1Pr2 = "NO"
-        print(f"ResgoCrit1Pregunta 2: {self.respuesta_Rc1Pr2}")
+            self.respuesta_superRc1Pr2 = "NO"
+        print(f"ResgoCrit1Pregunta 2: {self.respuesta_superRc1Pr2}")
 
     def RiesgCrit1Pr3(self):
         if self.sender() == self.superRc1Pr3_si:
-            self.respuesta_Rc1Pr3 = "SI"
+            self.respuesta_superRc1Pr3 = "SI"
         elif self.sender() == self.superRc1Pr3_no:
-            self.respuesta_Rc1Pr3 = "NO"
-        print(f"ResgoCrit1Pregunta 3: {self.respuesta_Rc1Pr3}")
+            self.respuesta_superRc1Pr3 = "NO"
+        print(f"ResgoCrit1Pregunta 3: {self.respuesta_superRc1Pr3}")
 
     def RiesgCrit1Pr4(self):
         if self.sender() == self.superRc1Pr4_si:
-            self.respuesta_Rc1Pr4 = "SI"
+            self.respuesta_superRc1Pr4 = "SI"
         elif self.sender() == self.superRc1Pr4_no:
-            self.respuesta_Rc1Pr4 = "NO"
-        print(f"ResgoCrit1Pregunta 4: {self.respuesta_Rc1Pr4}")
+            self.respuesta_superRc1Pr4 = "NO"
+        print(f"ResgoCrit1Pregunta 4: {self.respuesta_superRc1Pr4}")
 
     def RiesgCrit1Pr5(self):
         if self.sender() == self.superRc1Pr5_si:
-            self.respuesta_Rc1Pr5 = "SI"
+            self.respuesta_superRc1Pr5 = "SI"
         elif self.sender() == self.superRc1Pr5_no:
-            self.respuesta_Rc1Pr5 = "NO"
-        print(f"ResgoCrit1Pregunta 5: {self.respuesta_Rc1Pr5}")
+            self.respuesta_superRc1Pr5 = "NO"
+        print(f"ResgoCrit1Pregunta 5: {self.respuesta_superRc1Pr5}")
 
     def RiesgCrit1Pr6(self):
         if self.sender() == self.superRc1Pr6_si:
-            self.respuesta_Rc1Pr6 = "SI"
+            self.respuesta_superRc1Pr6 = "SI"
         elif self.sender() == self.superRc1Pr6_no:
-            self.respuesta_Rc1Pr6 = "NO"
-        print(f"ResgoCrit1Pregunta 6: {self.respuesta_Rc1Pr6}")
+            self.respuesta_superRc1Pr6 = "NO"
+        print(f"ResgoCrit1Pregunta 6: {self.respuesta_superRc1Pr6}")
 
     def RiesgCrit1Pr7(self):
         if self.sender() == self.superRc1Pr7_si:
-            self.respuesta_Rc1Pr7 = "SI"
+            self.respuesta_superRc1Pr7 = "SI"
         elif self.sender() == self.superRc1Pr7_no:
-            self.respuesta_Rc1Pr7 = "NO"
-        print(f"ResgoCrit1Pregunta 7: {self.respuesta_Rc1Pr7}")
+            self.respuesta_superRc1Pr7 = "NO"
+        print(f"ResgoCrit1Pregunta 7: {self.respuesta_superRc1Pr7}")
 
     def RiesgCrit1Pr8(self):
         if self.sender() == self.superRc1Pr8_si:
-            self.respuesta_Rc1Pr8 = "SI"
+            self.respuesta_superRc1Pr8 = "SI"
         elif self.sender() == self.superRc1Pr8_no:
-            self.respuesta_Rc1Pr8 = "NO"
-        print(f"ResgoCrit1Pregunta 8: {self.respuesta_Rc1Pr8}")
+            self.respuesta_superRc1Pr8 = "NO"
+        print(f"ResgoCrit1Pregunta 8: {self.respuesta_superRc1Pr8}")
 
 
     def RiesgCrit2Pr1(self):
         if self.sender() == self.superRc2Pr1_si:
-            self.respuesta_Rc2Pr1 = "SI"
+            self.respuesta_superRc2Pr1 = "SI"
         elif self.sender() == self.superRc2Pr1_no:
-            self.respuesta_Rc2Pr1 = "NO"
-        print(f"ResgoCrit2Pregunta 1: {self.respuesta_Rc2Pr1}")
+            self.respuesta_superRc2Pr1 = "NO"
+        print(f"ResgoCrit2Pregunta 1: {self.respuesta_superRc2Pr1}")
 
     def RiesgCrit2Pr2(self):
         if self.sender() == self.superRc2Pr2_si:
-            self.respuesta_Rc2Pr2 = "SI"
+            self.respuesta_superRc2Pr2 = "SI"
         elif self.sender() == self.superRc2Pr2_no:
-            self.respuesta_Rc2Pr2 = "NO"
-        print(f"ResgoCrit2Pregunta 2: {self.respuesta_Rc2Pr2}")
+            self.respuesta_superRc2Pr2 = "NO"
+        print(f"ResgoCrit2Pregunta 2: {self.respuesta_superRc2Pr2}")
 
     def RiesgCrit2Pr3(self):
         if self.sender() == self.superRc2Pr3_si:
-            self.respuesta_Rc2Pr3 = "SI"
+            self.respuesta_superRc2Pr3 = "SI"
         elif self.sender() == self.superRc2Pr3_no:
-            self.respuesta_Rc2Pr3 = "NO"
-        print(f"ResgoCrit2Pregunta 3: {self.respuesta_Rc2Pr3}")
+            self.respuesta_superRc2Pr3 = "NO"
+        print(f"ResgoCrit2Pregunta 3: {self.respuesta_superRc2Pr3}")
 
     def RiesgCrit2Pr4(self):
         if self.sender() == self.superRc2Pr4_si:
-            self.respuesta_Rc2Pr4 = "SI"
+            self.respuesta_superRc2Pr4 = "SI"
         elif self.sender() == self.superRc2Pr4_no:
-            self.respuesta_Rc2Pr4 = "NO"
-        print(f"ResgoCrit2Pregunta 4: {self.respuesta_Rc2Pr4}")
+            self.respuesta_superRc2Pr4 = "NO"
+        print(f"ResgoCrit2Pregunta 4: {self.respuesta_superRc2Pr4}")
 
     def RiesgCrit2Pr5(self):
         if self.sender() == self.superRc2Pr5_si:
-            self.respuesta_Rc2Pr5 = "SI"
+            self.respuesta_superRc2Pr5 = "SI"
         elif self.sender() == self.superRc2Pr5_no:
-            self.respuesta_Rc2Pr5 = "NO"
-        print(f"ResgoCrit2Pregunta 5: {self.respuesta_Rc2Pr5}")
+            self.respuesta_superRc2Pr5 = "NO"
+        print(f"ResgoCrit2Pregunta 5: {self.respuesta_superRc2Pr5}")
 
     def RiesgCrit2Pr6(self):
         if self.sender() == self.superRc2Pr6_si:
-            self.respuesta_Rc2Pr6 = "SI"
+            self.respuesta_superRc2Pr6 = "SI"
         elif self.sender() == self.superRc2Pr6_no:
-            self.respuesta_Rc2Pr6 = "NO"
-        print(f"ResgoCrit2Pregunta 6: {self.respuesta_Rc2Pr6}")
+            self.respuesta_superRc2Pr6 = "NO"
+        print(f"ResgoCrit2Pregunta 6: {self.respuesta_superRc2Pr6}")
 
     def RiesgCrit2Pr7(self):
         if self.sender() == self.superRc2Pr7_si:
-            self.respuesta_Rc2Pr7 = "SI"
+            self.respuesta_superRc2Pr7 = "SI"
         elif self.sender() == self.superRc2Pr7_no:
-            self.respuesta_Rc2Pr7 = "NO"
-        print(f"ResgoCrit2Pregunta 7: {self.respuesta_Rc2Pr7}")
+            self.respuesta_superRc2Pr7 = "NO"
+        print(f"ResgoCrit2Pregunta 7: {self.respuesta_superRc2Pr7}")
 
     def RiesgCrit2Pr8(self):
         if self.sender() == self.superRc2Pr8_si:
-            self.respuesta_Rc2Pr8 = "SI"
+            self.respuesta_superRc2Pr8 = "SI"
         elif self.sender() == self.superRc2Pr8_no:
-            self.respuesta_Rc2Pr8 = "NO"
-        print(f"ResgoCrit2Pregunta 8: {self.respuesta_Rc2Pr8}")
+            self.respuesta_superRc2Pr8 = "NO"
+        print(f"ResgoCrit2Pregunta 8: {self.respuesta_superRc2Pr8}")
 
     def control_bt_normal(self): 
         self.showNormal()
@@ -315,6 +323,9 @@ class Supervisor(QMainWindow, Ui_MainWindow):
         cambioDatos(self.rut, self.datos)
         self.hide()
 
+    def anadirEmpleado(self):
+        anadirEmpleado()
+
     def procesarSeleccion(self, seleccion):
         if seleccion == "Lavado de material":
             return "Lavado de material"
@@ -351,20 +362,43 @@ class Supervisor(QMainWindow, Ui_MainWindow):
         self.superNombreRc2.setText(riesgoCrit[4])
         self.superCodRc1.setText(riesgoCrit[1])
         self.superCodRc2.setText(riesgoCrit[3])
+        self.riesgoCrit = riesgoCrit
 
     def mostrarTablaTrabajadores(self):
-        trabajadores = self.contr.mostrarTrabajadores()
-        print(trabajadores)
+        Trabajadores = self.contr.mostrarTrabajadores()
+        print(Trabajadores)
         self.trabajadores.setRowCount(0)
-        self.trabajadores.setRowCount(len(trabajadores))
-        for i, trabajador in enumerate(trabajadores):
+        self.trabajadores.setRowCount(len(Trabajadores))
+        for i, trabajador in enumerate(Trabajadores):
             self.trabajadores.setItem(i, 0, QTableWidgetItem(trabajador[0]))  # nombre_completo
             self.trabajadores.setItem(i, 1, QTableWidgetItem(trabajador[1]))  # rut
             self.trabajadores.setItem(i, 2, QTableWidgetItem(trabajador[2]))  # correo
             self.trabajadores.setItem(i, 3, QTableWidgetItem(trabajador[3]))  # especialidad
 
-    def mostrarTablaART(self):
-        Arts = self.contr.mostrarARTCreadas()
+    def mostrarTablaArtActividad(self):
+        artActividad = self.contr.mostrarARTporActividad(self.resultado,self.datos[0])
+        print(artActividad)
+        self.verLlenarART.setRowCount(0)
+        self.verLlenarART.setRowCount(len(artActividad))
+        for i, trabajador in enumerate(artActividad):
+            self.verLlenarART.setItem(i, 0, QTableWidgetItem(trabajador[0]))  # rut
+            self.verLlenarART.setItem(i, 1, QTableWidgetItem(trabajador[1]))  # nombre_completo
+            self.verLlenarART.setItem(i, 2, QTableWidgetItem(trabajador[2]))  # id_ART
+            self.verLlenarART.setItem(i, 3, QTableWidgetItem(trabajador[3]))  # Actividad
+            self.verLlenarART.setItem(i, 4, QTableWidgetItem(trabajador[4]))  # Trabajo_simultaneo
+            self.verLlenarART.setItem(i, 5, QTableWidgetItem(trabajador[5]))  # Estado Art
+            btn = QPushButton('Concluido')
+            btn.clicked.connect(lambda _, row=i: self.botonAccion(row))
+            self.verLlenarART.setCellWidget(i, 6, btn)
+
+    def mostrarTabla(self, rut=None, fecha=None):
+        if rut:
+            Arts = self.contr.filtroRut(self.datos[0],rut)
+        elif fecha:
+            Arts = self.contr.filtroFecha(self.datos[0],fecha)
+        else:
+            Arts = self.contr.mostrarARTCreadas(self.datos[0])
+
         print(Arts)
         self.verARTS.setRowCount(0)
         self.verARTS.setRowCount(len(Arts))
@@ -375,41 +409,143 @@ class Supervisor(QMainWindow, Ui_MainWindow):
             self.verARTS.setItem(i, 3, QTableWidgetItem(trabajador[3]))  # fecha
             self.verARTS.setItem(i, 4, QTableWidgetItem(trabajador[4]))  # hora_inicio
             self.verARTS.setItem(i, 5, QTableWidgetItem(trabajador[5]))  # hora_termino
+            self.verARTS.setItem(i, 6, QTableWidgetItem(trabajador[6]))  # Estado_ART
+            
+    def mostrarTablaART(self):
+        self.mostrarTabla()
 
-    def mostrarTablaArtActividad(self):
-        artActividad = self.contr.mostrarARTporActividad(self.resultado)
-        print(artActividad)
-        self.verLlenarART.setRowCount(0)
-        self.verLlenarART.setRowCount(len(artActividad))
-        for i, trabajador in enumerate(artActividad):
-            self.verLlenarART.setItem(i, 0, QTableWidgetItem(trabajador[0]))  # nombre_completo
-            self.verLlenarART.setItem(i, 1, QTableWidgetItem(trabajador[1]))  # actividad
-            self.verLlenarART.setItem(i, 2, QTableWidgetItem(trabajador[2]))  # trabajo_simultaneo
-            self.verLlenarART.setItem(i, 3, QTableWidgetItem(trabajador[3]))  # estado_trabajador
+    def mostrarTablaARTRut(self):
+        rut = self.ingreNombreTrab.text()
+        self.mostrarTabla(rut=rut)
 
-    def EndSuperART(self):
-        self.respuestasPS.append(self.respuesta_PS1)
-        self.respuestasPS.append(self.respuesta_PS2)
-        self.respuestasPS.append(self.respuesta_PS3)
-        self.respuestasPS.append(self.respuesta_PS4)
-        self.respuestasPS.append(self.respuesta_PS5)
-        self.respuestasPS.append(self.respuesta_PS6)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr1)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr2)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr3)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr4)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr5)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr6)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr7)
-        self.respuestasRc1.append(self.respuesta_Rc1Pr8)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr1)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr2)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr3)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr4)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr5)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr6)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr7)
-        self.respuestasRc2.append(self.respuesta_Rc2Pr8)
-        print(self.respuestasSt)
-        print(self.respuestasRc1)
-        print(self.respuestasRc2)
+    def mostrarTablaARTFecha(self):
+        fechaART = self.fechaART.date().toString("yyyy-MM-dd")
+        self.mostrarTabla(fecha=fechaART)
+
+    def mostrarTablaTarjetaVerde(self):
+        tjtaVerde = self.contr.filtrotarjetaVerde(self.datos[0])
+        print(tjtaVerde)
+        self.tarjetaVerde.setRowCount(0)
+        self.tarjetaVerde.setRowCount(len(tjtaVerde))
+        for i, trabajador in enumerate(tjtaVerde):
+            self.tarjetaVerde.setItem(i, 0, QTableWidgetItem(trabajador[0]))  # id_ART
+            self.tarjetaVerde.setItem(i, 1, QTableWidgetItem(trabajador[1]))  # nombre_completo
+            self.tarjetaVerde.setItem(i, 2, QTableWidgetItem(trabajador[2]))  # rut
+            self.tarjetaVerde.setItem(i, 3, QTableWidgetItem(trabajador[3]))  # actividad
+            self.tarjetaVerde.setItem(i, 4, QTableWidgetItem(trabajador[4]))  # fecha
+            self.tarjetaVerde.setItem(i, 5, QTableWidgetItem(trabajador[5]))  # hora_inicio
+            self.tarjetaVerde.setItem(i, 6, QTableWidgetItem(trabajador[6]))  # hora_termino
+            self.tarjetaVerde.setItem(i, 7, QTableWidgetItem(trabajador[7]))  # Estado_ART
+            btn = QPushButton('Revisado')
+            btn.clicked.connect(lambda _, row=i: self.botonAccion2(row))
+            self.tarjetaVerde.setCellWidget(i, 8, btn)
+
+    def botonAccion2(self, row):
+        id_ART = self.tarjetaVerde.item(row, 0).text()
+        nombre_completo = self.tarjetaVerde.item(row, 1).text()
+        Rut = self.tarjetaVerde.item(row, 2).text()
+        actividad = self.tarjetaVerde.item(row, 3).text()
+        fecha = self.tarjetaVerde.item(row, 4).text()
+        hora_inicio = self.tarjetaVerde.item(row, 5).text()
+        hora_termino = self.tarjetaVerde.item(row, 6).text()
+        Estado_ART = self.tarjetaVerde.item(row, 7).text()
+        print(f"Botón en fila {row} presionado:,{id_ART} {Rut}, {nombre_completo}, {actividad}, {fecha}, {hora_inicio}, {hora_termino}, {Estado_ART}")
+        self.contr.actualizarEstadoArt4(id_ART)
+
+    def botonAccion(self, row):
+        Rut = self.verLlenarART.item(row, 0).text()
+        nombre_completo = self.verLlenarART.item(row, 1).text()
+        id_ART = self.verLlenarART.item(row, 2).text()
+        actividad = self.verLlenarART.item(row, 3).text()
+        trabajo_simultaneo = self.verLlenarART.item(row, 4).text()
+        Estado_ART = self.verLlenarART.item(row, 5).text()
+        print(f"Botón en fila {row} presionado: {Rut}, {nombre_completo}, {id_ART}, {actividad}, {trabajo_simultaneo}, {Estado_ART}")
+        resultadosComparacion = True
+        nPreguntasR1 = self.contr.sacarNumeroPreguntas(self.riesgoCrit[2])
+        self.respuestasPS.append(self.respuesta_Ps1)
+        self.respuestasPS.append(self.respuesta_Ps2)
+        self.respuestasPS.append(self.respuesta_Ps3)
+        self.respuestasPS.append(self.respuesta_Ps4)
+        self.respuestasPS.append(self.respuesta_Ps5)
+        self.respuestasPS.append(self.respuesta_Ps6)
+        self.respuestasRc1.append(self.respuesta_superRc1Pr1)
+        self.respuestasRc1.append(self.respuesta_superRc1Pr2)
+        self.respuestasRc1.append(self.respuesta_superRc1Pr3)
+        self.respuestasRc1.append(self.respuesta_superRc1Pr4)
+        self.respuestasRc1.append(self.respuesta_superRc1Pr5)
+        if  int(nPreguntasR1) > 5:
+            self.respuestasRc1.append(self.respuesta_Rc1Pr6)
+            self.respuestasRc1.append(self.respuesta_Rc1Pr7)
+            self.respuestasRc1.append(self.respuesta_Rc1Pr8)
+        elif self.riesgoCrit[4] != '' :
+            nPreguntasR2 = self.contr.sacarNumeroPreguntas(self.riesgoCrit[4])
+            self.respuestasRc2.append(self.respuesta_superRc2Pr1)
+            self.respuestasRc2.append(self.respuesta_superRc2Pr2)
+            self.respuestasRc2.append(self.respuesta_superRc2Pr3)
+            self.respuestasRc2.append(self.respuesta_superRc2Pr4)
+            self.respuestasRc2.append(self.respuesta_superRc2Pr5)
+            self.respuestasRc2.append(self.respuesta_superRc2Pr6)
+            self.respuestasRc2.append(self.respuesta_superRc2Pr7)
+            print(self.respuestasPS)
+            print(self.respuestasRc1)
+            print(self.respuestasRc2)
+            Rpreguntas = self.contr.mostrarResPreguntas()
+            if Rpreguntas == self.respuestasPS:
+                Rcrit1Resp = self.contr.mostrarRcRespuestas(self.riesgoCrit[2],self.riesgoCrit[4])
+                for elemento in self.respuestasRc1:
+                    if elemento != Rcrit1Resp[0]:
+                        resultadosComparacion = False
+                        break   
+                if resultadosComparacion == True:
+                    for elemento in self.respuestasRc2:
+                        if elemento != Rcrit1Resp[1]:
+                            resultadosComparacion = False
+                            break   
+                    if resultadosComparacion == True:
+                        self.contr.incorpora(id_ART,7,1)   #self.respuestasPt[0] en el ultimo
+                        self.contr.incorpora(id_ART,8,1)   #self.respuestasPt[1] en el ultimo
+                        self.contr.incorpora(id_ART,9,1)   #self.respuestasPt[2] en el ultimo
+                        self.contr.incorpora(id_ART,10,1)   #self.respuestasPt[3] en el ultimo
+                        self.contr.incorpora(id_ART,11,1)   #self.respuestasPt[4] en el ultimo
+                        self.contr.incorpora(id_ART,12,1)   #self.respuestasPt[5] en el ultimo
+                        self.contr.actualizarEstadoArt2(id_ART)
+                        self.respuestasPS = []
+                        self.respuestasRc1 =[]
+                        self.respuestasRc2 =[]
+                        print("ART completada correctamente")
+                    else:
+                        print("no se creo la ART no coincide con las respuestas Rc1")
+                else:
+                    print("no se creo la ART no coincide con las respuestas Rc2")
+                if int(nPreguntasR2) > 7:
+                    self.respuestasRc2.append(self.respuesta_Rc2Pr8)
+            else:
+                print("no se creo la ART faltan preguntas transversales")
+        else:
+            self.respuestasRc2.append(None)
+            print(self.respuestasPS)
+            print(self.respuestasRc1)
+            print(self.respuestasRc2)
+            Rpreguntas = self.contr.mostrarResPreguntas()
+            if Rpreguntas == self.respuestasPS:
+                Rcrit1Resp = self.contr.mostrarRcRespuestas(self.riesgoCrit[2],self.riesgoCrit[4])
+                for elemento in self.respuestasRc1:
+                    if elemento != Rcrit1Resp[0]:
+                        resultadosComparacion = False
+                        break   
+                if resultadosComparacion == True:
+                    self.contr.incorpora(id_ART,7,1)   #self.respuestasPt[0] en el ultimo
+                    self.contr.incorpora(id_ART,8,1)   #self.respuestasPt[1] en el ultimo
+                    self.contr.incorpora(id_ART,9,1)   #self.respuestasPt[2] en el ultimo
+                    self.contr.incorpora(id_ART,10,1)   #self.respuestasPt[3] en el ultimo
+                    self.contr.incorpora(id_ART,11,1)   #self.respuestasPt[4] en el ultimo
+                    self.contr.incorpora(id_ART,12,1)   #self.respuestasPt[5] en el ultimo
+                    self.contr.actualizarEstadoArt2(id_ART)
+                    self.respuestasPS = []
+                    self.respuestasRc1 =[]
+                    self.respuestasRc2 =[]
+                    print("ART completada correctamente")
+                else:
+                    print("no se creo la ART no conincide con las respuestas")
+            else: 
+                print("no se creo la ART falta preguntas transversales")

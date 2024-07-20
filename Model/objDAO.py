@@ -47,6 +47,19 @@ class BD_WSS:
         except Exception as ex:
             msg = "Error: " +str(ex.args)
         return msg
+    
+    def buscarCorreo(self,correo):
+        sql = "SELECT correo FROM empleado WHERE correo = '"+correo+"'"
+        try:
+            self.cursor.execute(sql)
+            Empleado = self.cursor.fetchone()
+            if Empleado != None: 
+                msg = "Si"
+            else: 
+                msg = 'No'
+        except Exception as ex:
+            msg = "Error: " +str(ex.args)
+        return msg
 
     def buscarFecha(self,fecha):
         sql = "SELECT fecha FROM ver_arts WHERE fecha = '"+fecha+"'"
@@ -107,7 +120,7 @@ class BD_WSS:
         return msg
 
     def crearEmpleado(self,nuevo):
-        sql = "INSERT INTO empleado(rut,nombre_completo,correo,telefono,direccion_residencia,cargo,contraseña) VALUES ('"+nuevo.getRut()+"', '"+nuevo.getNombreCompleto()+"','"+nuevo.getCorreo()+"','"+str(nuevo.getTelefono())+"', '"+nuevo.getDireccionResidencia()+"','"+nuevo.getCargo()+"','"+nuevo.getContraseña()+"');"
+        sql = "INSERT INTO empleado(rut,nombre_completo,correo,telefono,direccion_residencia,cargo, especialidad, contraseña) VALUES ('"+nuevo.getRut()+"', '"+nuevo.getNombreCompleto()+"','"+nuevo.getCorreo()+"','"+str(nuevo.getTelefono())+"', '"+nuevo.getDireccionResidencia()+"','"+nuevo.getCargo()+"','"+nuevo.getEspecialidad()+"','"+nuevo.getContraseña()+"')"
         msg = "El empleado a sido creado Correctamente"
         try:
             self.cursor.execute(sql)
@@ -326,15 +339,15 @@ class BD_WSS:
             print("Error: " + str(ex.args))
             return []
 
-    def mostrarARTCreadas(self):
+    def mostrarARTCreadas(self,supervisor):
         listaART = []
-        sql = "SELECT empleado.nombre_completo, empleado.rut, actividad.nombre, realiza.fecha, art.hora_inicio, art.hora_termino FROM realiza JOIN empleado ON realiza.rut = empleado.rut JOIN art ON realiza.id_ART = art.id_ART JOIN actividad ON art.id_actividad = actividad.id_actividad"
+        sql = "SELECT empleado.nombre_completo, empleado.rut, actividad.nombre, realiza.fecha, art.hora_inicio, art.hora_termino, realiza.estado_ART FROM realiza JOIN empleado ON realiza.rut = empleado.rut JOIN art ON realiza.id_ART = art.id_ART JOIN actividad ON art.id_actividad = actividad.id_actividad WHERE realiza.supervisor_asignado = '"+supervisor+"';"
         try:
             self.cursor.execute(sql)
             resultados = self.cursor.fetchall()
             if resultados:
                 for registro in resultados:
-                    listaART.append((registro[0], registro[1], registro[2], str(registro[3]), str(registro[4]), str(registro[5])))
+                    listaART.append((registro[0], registro[1], registro[2], str(registro[3]), str(registro[4]), str(registro[5]), str(registro[6])))
                 return listaART
             else:
                 return []
@@ -342,15 +355,15 @@ class BD_WSS:
             print("Error: " + str(ex.args))
             return []
         
-    def mostrarARTporActividad(self,nombre):
+    def mostrarARTporActividad(self,actividad,supervisor):
         listaporActividad = []
-        sql = "SELECT empleado.nombre_completo, actividad.nombre, art.trabajo_simultaneo, art.estado_trabajador FROM art JOIN realiza ON art.id_ART = realiza.id_ART JOIN empleado ON realiza.rut = empleado.rut JOIN actividad ON art.id_actividad = actividad.id_actividad WHERE actividad.nombre = '"+nombre+"'"
+        sql = "SELECT empleado.rut, empleado.nombre_completo, art.id_ART, actividad.nombre, art.trabajo_simultaneo, realiza.estado_ART FROM art JOIN realiza ON art.id_ART = realiza.id_ART JOIN empleado ON realiza.rut = empleado.rut JOIN actividad ON art.id_actividad = actividad.id_actividad WHERE actividad.nombre = '"+actividad+"' AND realiza.estado_ART = 'pendiente' AND realiza.supervisor_asignado = '"+supervisor+"'"
         try:
             self.cursor.execute(sql)
             resultados = self.cursor.fetchall()
             if resultados:
                 for registro in resultados:
-                    listaporActividad.append((registro[0], registro[1], str(registro[2]), str(registro[3])))
+                    listaporActividad.append((registro[0], registro[1], str(registro[2]), str(registro[3]),str(registro[4]),registro[5]))
                 return listaporActividad
             else:
                 return []
@@ -368,3 +381,173 @@ class BD_WSS:
         except Exception as ex:
             msg = "Error: " + str(ex.args)
         return msg
+    
+    def mostrarRcRespuestas(self, nombre, nombre2):
+        respuestaRiesgo = []
+        sql = "SELECT respuesta_correcta FROM riesgocritico WHERE nombre ='"+nombre+"' OR nombre = '"+nombre2+"'"
+        try:
+            self.cursor.execute(sql)
+            riesgorespuesta = self.cursor.fetchall()
+            if riesgorespuesta:
+                respuestaRiesgo = [fila[0] if fila[0] != 1 else 'SI' for fila in riesgorespuesta]
+                if len(respuestaRiesgo) == 1:
+                    respuestaRiesgo.append("")
+        except Exception as ex:
+            msg = "Error: " + str(ex)
+            respuestaRiesgo.append(msg)
+        return respuestaRiesgo
+
+    def mostrarResPreguntas(self):
+        respuestasPreguntas = []
+        sql = "SELECT respuesta_correcta FROM pregunta WHERE cargo= 'Trabajador'"
+        try:
+            self.cursor.execute(sql)
+            preguntasRespuestas = self.cursor.fetchall()
+            if preguntasRespuestas:
+                respuestasPreguntas = [fila[0] if fila[0] != 1 else 'SI' for fila in preguntasRespuestas]
+                if len(respuestasPreguntas) == 1:
+                    respuestasPreguntas.append("")
+        except Exception as ex:
+            msg = "Error: " + str(ex)
+            respuestasPreguntas.append(msg)
+        return respuestasPreguntas
+    
+    def idUltimaARTRut(self,rut):
+        sql = "SELECT id_ART FROM realiza WHERE rut='"+rut+"' ORDER BY id_art DESC LIMIT 1"
+        try:
+            self.cursor.execute(sql)
+            realiza= self.cursor.fetchone()
+            if realiza != None:
+                return realiza[0]
+            else: 
+                return "No hay ninguna ART ingresada"
+        except Exception as ex:
+            print("Error: " + str(ex.args))
+    
+    def incorpora(self, id_art, id_pregunta, respuesta):
+        sql = "INSERT INTO incorpora(id_art, id_pregunta, respuesta) VALUES ('"+str(id_art)+"','"+str(id_pregunta)+"', '"+str(respuesta)+"');"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+            msg = "Incorporación realizada correctamente"
+        except Exception as ex:
+            msg = "Error en incorpora: " + str(ex.args)
+        return msg
+    
+    def actualizarEstadoArt1(self, id_ART):
+        sql = "UPDATE realiza SET estado_ART = 'pendiente' WHERE id_ART = '"+id_ART+"'"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+            msg = "Estado de ART actualizado a 'pendiente'."
+        except Exception as ex:
+            msg = "Error al actualizar estado de ART: " + str(ex.args)
+        return msg
+    
+    def actualizarEstadoArt2(self, id_ART):
+        sql = "UPDATE realiza SET estado_ART = 'concluido' WHERE id_ART = '"+id_ART+"'"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+            msg = "Estado de ART actualizado a 'concluido'."
+        except Exception as ex:
+            msg = "Error al actualizar estado de ART: " + str(ex.args)
+        return msg
+    
+    def actualizarEstadoArt3(self, id_ART):
+        sql = "UPDATE realiza SET estado_ART = 'tarjeta verde' WHERE id_ART = '"+id_ART+"'"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+            msg = "Estado de ART actualizado a 'tarjeta verde'."
+        except Exception as ex:
+            msg = "Error al actualizar estado de ART: " + str(ex.args)
+        return msg
+    
+    def actualizarEstadoArt4(self, id_ART):
+        sql = "UPDATE realiza SET estado_ART = 'Revisado' WHERE id_ART = '"+id_ART+"'"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+            msg = "Estado de ART actualizado a 'Revisado'."
+        except Exception as ex:
+            msg = "Error al actualizar estado de ART: " + str(ex.args)
+        return msg
+    
+    def asignarSuper(self,nombre,id_ART):
+        sql = "UPDATE realiza SET supervisor_asignado = '"+nombre+"' WHERE id_ART = '"+id_ART+"'"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+            msg = "Supervisor asignado a la ART creada."
+        except Exception as ex:
+            msg = "Error de asignar supervisor: " + str(ex.args)
+        return msg
+    
+    def ingresartrabSimut(self,contexto, coordinacion, verif_control, comuni_tab, id_ART):
+        contextoStr = ",".join(contexto)
+        sql = "UPDATE art SET Contexto_trab_simultaneo = '"+contextoStr+"', coordinacion_lider = '"+coordinacion+"', verificacion_controles_criticos = '"+verif_control+"', comunicacion_trabajadores_control = '"+comuni_tab+"' WHERE id_ART = '"+id_ART+"'"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+            msg = "Trabajo simultaneo puesto"
+        except Exception as ex:
+            msg = "Error al actualizar estado de ART: " + str(ex.args)
+        return msg
+    
+    def filtroRut(self,supervisor,rut):
+        sql = "SELECT empleado.nombre_completo, empleado.rut, actividad.nombre, realiza.fecha, art.hora_inicio, art.hora_termino, realiza.estado_ART FROM realiza JOIN empleado ON realiza.rut = empleado.rut JOIN art ON realiza.id_ART = art.id_ART JOIN actividad ON art.id_actividad = actividad.id_actividad WHERE realiza.supervisor_asignado = '"+supervisor+"' AND empleado.rut = '"+rut+"';"
+        listaART = []
+        try:
+            self.cursor.execute(sql)
+            resultados = self.cursor.fetchall()
+            if resultados:
+                for registro in resultados:
+                    listaART.append((registro[0], registro[1], registro[2], str(registro[3]), str(registro[4]), str(registro[5]), str(registro[6])))
+                return listaART
+            else:
+                return []
+        except Exception as ex:
+            print("Error: " + str(ex.args))
+            return []
+        
+    def filtroFecha(self,supervisor,fecha):
+        sql = "SELECT empleado.nombre_completo, empleado.rut, actividad.nombre, realiza.fecha, art.hora_inicio, art.hora_termino, realiza.estado_ART FROM realiza JOIN empleado ON realiza.rut = empleado.rut JOIN art ON realiza.id_ART = art.id_ART JOIN actividad ON art.id_actividad = actividad.id_actividad WHERE realiza.supervisor_asignado = '"+supervisor+"' AND realiza.fecha = '"+fecha+"';"
+        listaART = []
+        try:
+            self.cursor.execute(sql)
+            resultados = self.cursor.fetchall()
+            if resultados:
+                for registro in resultados:
+                    listaART.append((registro[0], registro[1], registro[2], str(registro[3]), str(registro[4]), str(registro[5]), str(registro[6])))
+                return listaART
+            else:
+                return []
+        except Exception as ex:
+            print("Error: " + str(ex.args))
+            return []
+        
+    def filtrotarjetaVerde(self,supervisor):
+        sql = "SELECT realiza.id_ART, empleado.nombre_completo, empleado.rut, actividad.nombre, realiza.fecha, art.hora_inicio, art.hora_termino, realiza.estado_ART FROM realiza JOIN empleado ON realiza.rut = empleado.rut JOIN art ON realiza.id_ART = art.id_ART JOIN actividad ON art.id_actividad = actividad.id_actividad WHERE realiza.supervisor_asignado = '"+supervisor+"' AND realiza.estado_ART = 'tarjeta verde';"
+        listaART = []
+        try:
+            self.cursor.execute(sql)
+            resultados = self.cursor.fetchall()
+            if resultados:
+                for registro in resultados:
+                    listaART.append((str(registro[0]), registro[1], registro[2], str(registro[3]), str(registro[4]), str(registro[5]), str(registro[6]), registro[7]))
+                return listaART
+            else:
+                return []
+        except Exception as ex:
+            print("Error: " + str(ex.args))
+            return []
+        
+    def cambiarContraseña(self,contraseña,rut):
+        sql = "UPDATE empleado SET contraseña = '"+contraseña+"' WHERE rut = '"+rut+"'"
+        try:
+            self.cursor.execute(sql)
+            self.conector.commit()
+        except Exception as ex:
+            msg =  "Error: " + str(ex.args)
+            return msg

@@ -34,6 +34,7 @@ class Trabajador(QMainWindow, Ui_MainWindow):
         self.DireccionTrab.setText(datos[1])
         self.TelefonoTrab.setText(datos[2])
         self.CorreoTrab.setText(datos[3])
+        self.especialidadTrab.setText(datos[4])
         self.datos = datos
         self.rut = rut
         self.show()
@@ -42,6 +43,7 @@ class Trabajador(QMainWindow, Ui_MainWindow):
         self.resultado = ""
         self.ElegirArt.activated.connect(self.decision)
         self.IniciarArt()
+        self.CancelarArt.clicked.connect(self.cancelar)
 
 
     def control_bt_normal(self): 
@@ -77,6 +79,9 @@ class Trabajador(QMainWindow, Ui_MainWindow):
             self.bt_normal.hide()
             self.bt_maximize.show()
 
+    def cancelar(self):
+        self.hide()
+
     def procesarSeleccion(self, seleccion):
         if seleccion == "Lavado de material":
             return "Lavado de material"
@@ -100,8 +105,7 @@ class Trabajador(QMainWindow, Ui_MainWindow):
         print(self.resultado)
         print(riesgoCrit)
         controlRiesgo = self.contr.visualizarControlRiesgo(self.resultado)
-        ART(self.datos, riesgoCrit, controlRiesgo)
-        self.hide()
+        ART(self.rut,self.datos, riesgoCrit, controlRiesgo)
 
     def IniciarArt(self):
         self.iniciarArt.clicked.connect(self.abrirArt)

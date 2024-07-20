@@ -5,11 +5,11 @@ from PyQt6.QtWidgets import QMainWindow
 from GUI.ui_ART import Ui_MainWindow
 from PyQt6 import QtCore, QtWidgets
 
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QCheckBox, QPushButton,QRadioButton
 from PyQt6.QtCore import Qt, QPointF
 
 class ART(QMainWindow, Ui_MainWindow):
-    def __init__(self,datos, riesgoCrit,controlRiesgo):
+    def __init__(self,rut,datos, riesgoCrit,controlRiesgo):
         super().__init__()
         self.setupUi(self)
         self.bt_normal.hide()
@@ -29,6 +29,7 @@ class ART(QMainWindow, Ui_MainWindow):
         self.contr = Controlador()
         self.datos = datos
         self.riesgoCrit = riesgoCrit
+        self.rut = rut
         if riesgoCrit[1] == '6':
             self.RC1PR6.setVisible(False)
             self.RC1PR7.setVisible(False)
@@ -54,10 +55,12 @@ class ART(QMainWindow, Ui_MainWindow):
         self.show()
 
         self.respuestasPt = []
-        self.respuestasRc1 =[]
-        self.respuestasRc2 =[]
+        self.respuestasRc1 = []
+        self.respuestasRc2 = []
+        self.contextTrab = []
 
         self.respuestaTurno = None
+        self.seleccionadoSupervisor = None
 
         self.respuesta_PT1 = None
         self.respuesta_PT2 = None
@@ -92,6 +95,8 @@ class ART(QMainWindow, Ui_MainWindow):
 
         self.dia.clicked.connect(self.turno)
         self.noche.clicked.connect(self.turno)
+
+        self.nombresSuper.currentIndexChanged.connect(self.ElijeSuper)
 
         self.PT1_si.clicked.connect(self.pregunta1)
         self.PT1_no.clicked.connect(self.pregunta1)
@@ -142,6 +147,11 @@ class ART(QMainWindow, Ui_MainWindow):
 
         self.trabSimult_si.clicked.connect(self.trabSimultaneo)
         self.trabSimult_no.clicked.connect(self.trabSimultaneo)
+
+        self.contextoTrabajo1.stateChanged.connect(self.contexto)
+        self.contextoTrabajo2.stateChanged.connect(self.contexto)
+        self.contextoTrabajo3.stateChanged.connect(self.contexto)
+        self.contextoTrabajo4.stateChanged.connect(self.contexto)
 
         self.CoordLider_si.clicked.connect(self.coordinLider)
         self.CoordLider_no.clicked.connect(self.coordinLider)
@@ -194,12 +204,16 @@ class ART(QMainWindow, Ui_MainWindow):
         for empleado in empleados:
             self.nombresSuper.addItem(empleado)
 
+    def ElijeSuper(self):
+        self.seleccionadoSupervisor = self.nombresSuper.currentText()
+        print(f"Supervisor seleccionado: {self.seleccionadoSupervisor}")
+
     def turno(self):
         if self.sender() == self.dia:
-            self.respuestaTurno = '08:00:00'
-        elif self.sender() == self.noche:
             self.respuestaTurno = '20:00:00'
-        print(f"Pregunta 1: {self.respuesta_PT1}")
+        elif self.sender() == self.noche:
+            self.respuestaTurno = '08:00:00'
+        print(f"turno: {self.respuestaTurno}")
 
     def pregunta1(self):
         if self.sender() == self.PT1_si:
@@ -363,38 +377,71 @@ class ART(QMainWindow, Ui_MainWindow):
         if self.sender() == self.trabSimult_si:
             self.respuesta_trabSimult = 1
         elif self.sender() == self.trabSimult_no:
-            self.respuesta_trabSimult = "NO"
+            self.respuesta_trabSimult = 0
         print(f"respuesta_trabSimult: {self.respuesta_trabSimult}")
+
+    def contexto(self):
+        if self.contextoTrabajo1.isChecked():
+            if 'Trabajo junto a personal de aseo' not in self.contextTrab:
+                self.contextTrab.append('Trabajo junto a personal de aseo')
+        else:
+            if 'Trabajo junto a personal de aseo' in self.contextTrab:
+                self.contextTrab.remove('Trabajo junto a personal de aseo')
+
+        if self.contextoTrabajo2.isChecked():
+            if 'Trabajo sala compartida' not in self.contextTrab:
+                self.contextTrab.append('Trabajo sala compartida')
+        else:
+            if 'Trabajo sala compartida' in self.contextTrab:
+                self.contextTrab.remove('Trabajo sala compartida')
+
+        if self.contextoTrabajo3.isChecked():
+            if 'Trabajo en equipo' not in self.contextTrab:
+                self.contextTrab.append('Trabajo en equipo')
+        else:
+            if 'Trabajo en equipo' in self.contextTrab:
+                self.contextTrab.remove('Trabajo en equipo')
+
+        if self.contextoTrabajo4.isChecked():
+            if 'Trabajo entre actividades' not in self.contextTrab:
+                self.contextTrab.append('Trabajo entre actividades')
+        else:
+            if 'Trabajo entre actividades' in self.contextTrab:
+                self.contextTrab.remove('Trabajo entre actividades')
+
+        print(self.contextTrab)
 
     def coordinLider(self):
         if self.sender() == self.CoordLider_si:
-            self.respuesta_CoordLider = 1
+            self.respuesta_CoordLider = "1"
         elif self.sender() == self.CoordLider_no:
-            self.respuesta_CoordLider = "NO"
+            self.respuesta_CoordLider = "0"
         print(f"respuesta_CoordLider: {self.respuesta_CoordLider}")
 
     def verifCCr(self):
         if self.sender() == self.VerifCCritic_si:
-            self.respuesta_VerifCCritic = 1
+            self.respuesta_VerifCCritic = "1"
         elif self.sender() == self.VerifCCritic_no:
-            self.respuesta_VerifCCritic = "NO"
+            self.respuesta_VerifCCritic = "0"
         print(f"respuesta_VerifCCritic: {self.respuesta_VerifCCritic}")
         
     def verifTrab(self):
         if self.sender() == self.TSVerificado_si:
-            self.respuesta_TSVerificado = 1
+            self.respuesta_TSVerificado = "1"
         elif self.sender() == self.TSVerificado_no:
-            self.respuesta_TSVerificado = "NO"
+            self.respuesta_TSVerificado = "0"
         print(f"respuesta_TSVerificado: {self.respuesta_TSVerificado}")
 
     def condicionFisica(self):
         if self.sender() == self.confirCondicion_si:
             self.respuesta_confirCondicion = 1
         elif self.sender() == self.confirCondicion_no:
-            self.respuesta_confirCondicion = "NO"
+            self.respuesta_confirCondicion = 0
         print(f"respuesta_confirCondicion: {self.respuesta_confirCondicion}")
 
     def EndART(self):
+        self.terminarART.setVisible(False)
+        resultadosComparacion = True
         nPreguntasR1 = self.contr.sacarNumeroPreguntas(self.riesgoCrit[2])
         self.respuestasPt.append(self.respuesta_PT1)
         self.respuestasPt.append(self.respuesta_PT2)
@@ -423,14 +470,116 @@ class ART(QMainWindow, Ui_MainWindow):
             print(self.respuestasPt)
             print(self.respuestasRc1)
             print(self.respuestasRc2)
-            if int(nPreguntasR2) > 7:
-                self.respuestasRc2.append(self.respuesta_Rc2Pr8)
-                print(self.respuestasPt)
-                print(self.respuestasRc1)
-                print(self.respuestasRc2)
+            Rpreguntas = self.contr.mostrarResPreguntas()
+            if Rpreguntas == self.respuestasPt:
+                Rcrit1Resp = self.contr.mostrarRcRespuestas(self.riesgoCrit[2],self.riesgoCrit[4])
+                for elemento in self.respuestasRc1:
+                    if elemento != Rcrit1Resp[0]:
+                        resultadosComparacion = False
+                        break   
+                if resultadosComparacion == True:
+                    for elemento in self.respuestasRc2:
+                        if elemento != Rcrit1Resp[1]:
+                            resultadosComparacion = False
+                            break   
+                    if resultadosComparacion == True:
+                        self.contr.crearART(self.rut,self.respuesta_trabSimult,self.riesgoCrit[0],self.respuesta_confirCondicion,self.respuestaTurno)
+                        idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                        self.contr.incorpora(idArtCreado,1,1)   #self.respuestasPt[0] en el ultimo
+                        self.contr.incorpora(idArtCreado,2,1)   #self.respuestasPt[1] en el ultimo
+                        self.contr.incorpora(idArtCreado,3,1)   #self.respuestasPt[2] en el ultimo
+                        self.contr.incorpora(idArtCreado,4,1)   #self.respuestasPt[3] en el ultimo
+                        self.contr.incorpora(idArtCreado,5,1)   #self.respuestasPt[4] en el ultimo
+                        self.contr.incorpora(idArtCreado,6,1)   #self.respuestasPt[5] en el ultimo
+                        self.contr.actualizarEstadoArt1(str(idArtCreado))
+                        if self.respuesta_trabSimult == 0:
+                            self.contr.ingresartrabSimut((["No existe trabajo simultaneo"]),"0","0","0",str(idArtCreado))
+                            self.contr.asignarSuper(self.seleccionadoSupervisor,str(idArtCreado))
+                            self.infoEndArt.setText("ART creada correctamente puede cerrar la pestaña")
+                            if self.respuesta_confirCondicion == 0:
+                                self.contr.actualizarEstadoArt3(str(idArtCreado))
+                                self.infoEndArt.setText("Se notificara targeta verde al supervisor")
+                        else:
+                            self.contr.ingresartrabSimut((self.contextTrab),(self.respuesta_CoordLider),(self.respuesta_VerifCCritic),(self.respuesta_TSVerificado),(str(idArtCreado)))
+                            self.infoEndArt.setText("ART creada correctamente puede cerrar la pestaña")
+                            self.contr.asignarSuper(self.seleccionadoSupervisor,str(idArtCreado))
+                            if self.respuesta_confirCondicion == 0:
+                                self.contr.actualizarEstadoArt3(str(idArtCreado))
+                                self.infoEndArt.setText("Se notificara targeta verde al supervisor")
+                        print("ART creada correctamente")
+                    else:
+                        self.contr.crearART(self.rut,self.respuesta_trabSimult,self.riesgoCrit[0],self.respuesta_confirCondicion,self.respuestaTurno)
+                        if self.respuesta_trabSimult == 0:
+                            idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                            self.contr.ingresartrabSimut((["No existe trabajo simultaneo"]),"0","0","0",str(idArtCreado))
+                            self.contr.asignarSuper(self.seleccionadoSupervisor,str(idArtCreado))
+                        idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                        self.contr.actualizarEstadoArt3(str(idArtCreado))
+                        self.infoEndArt.setText("Se notificara targeta verde al supervisor")
+                        print("no se creo la ART no coincide con las respuestas Rc1")
+                else:
+                    self.contr.crearART(self.rut,self.respuesta_trabSimult,self.riesgoCrit[0],self.respuesta_confirCondicion,self.respuestaTurno)
+                    if self.respuesta_trabSimult == 0:
+                        idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                        self.contr.ingresartrabSimut((["No existe trabajo simultaneo"]),"0","0","0",str(idArtCreado))
+                        self.contr.asignarSuper(self.seleccionadoSupervisor,str(idArtCreado))
+                    idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                    self.contr.actualizarEstadoArt3(str(idArtCreado))
+                    self.infoEndArt.setText("Se notificara targeta verde al supervisor")
+                    print("no se creo la ART no coincide con las respuestas Rc2")
+                if int(nPreguntasR2) > 7:
+                    self.respuestasRc2.append(self.respuesta_Rc2Pr8)
+            else:
+                self.infoEndArt.setText("No se creo la ART faltan preguntas transversales")
+                print("no se creo la ART faltan preguntas transversales")
         else:
             self.respuestasRc2.append(None)
             print(self.respuestasPt)
             print(self.respuestasRc1)
             print(self.respuestasRc2)
-            self.contr.crearART(self.datos[0],self.respuesta_trabSimult,self.riesgoCrit[0],self.respuesta_confirCondicion,self.respuestaTurno)
+            Rpreguntas = self.contr.mostrarResPreguntas()
+            if Rpreguntas == self.respuestasPt:
+                Rcrit1Resp = self.contr.mostrarRcRespuestas(self.riesgoCrit[2],self.riesgoCrit[4])
+                for elemento in self.respuestasRc1:
+                    if elemento != Rcrit1Resp[0]:
+                        resultadosComparacion = False
+                        break   
+                if resultadosComparacion == True:
+                    self.contr.crearART(self.rut,self.respuesta_trabSimult,self.riesgoCrit[0],self.respuesta_confirCondicion,self.respuestaTurno)
+                    idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                    self.contr.incorpora(idArtCreado,1,1)   #self.respuestasPt[0] en el ultimo
+                    self.contr.incorpora(idArtCreado,2,1)   #self.respuestasPt[1] en el ultimo
+                    self.contr.incorpora(idArtCreado,3,1)   #self.respuestasPt[2] en el ultimo
+                    self.contr.incorpora(idArtCreado,4,1)   #self.respuestasPt[3] en el ultimo
+                    self.contr.incorpora(idArtCreado,5,1)   #self.respuestasPt[4] en el ultimo
+                    self.contr.incorpora(idArtCreado,6,1)   #self.respuestasPt[5] en el ultimo
+                    self.contr.actualizarEstadoArt1(str(idArtCreado))
+                    if self.respuesta_trabSimult == 0:
+                        self.contr.ingresartrabSimut((["No existe trabajo simultaneo"]),"0","0","0",str(idArtCreado))
+                        self.contr.asignarSuper(self.seleccionadoSupervisor,str(idArtCreado))
+                        self.infoEndArt.setText("ART creada correctamente puede cerrar la pestaña")
+                        if self.respuesta_confirCondicion == 0:
+                            self.contr.actualizarEstadoArt3(str(idArtCreado))
+                            self.infoEndArt.setText("Se notificara targeta verde al supervisor")
+                    else:
+                        self.contr.ingresartrabSimut((self.contextTrab),(self.respuesta_CoordLider),(self.respuesta_VerifCCritic),(self.respuesta_TSVerificado),(str(idArtCreado)))
+                        self.infoEndArt.setText("ART creada correctamente puede cerrar la pestaña")
+                        self.contr.asignarSuper(self.seleccionadoSupervisor,str(idArtCreado))
+                        if self.respuesta_confirCondicion == 0:
+                            self.contr.actualizarEstadoArt3(str(idArtCreado))
+                            self.infoEndArt.setText("Se notificara targeta verde al supervisor")
+                    print("ART creada correctamente")
+                else:
+                    self.contr.crearART(self.rut,self.respuesta_trabSimult,self.riesgoCrit[0],self.respuesta_confirCondicion,self.respuestaTurno)
+                    if self.respuesta_trabSimult == 0:
+                        idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                        self.contr.ingresartrabSimut((["No existe trabajo simultaneo"]),"0","0","0",str(idArtCreado))
+                        self.contr.asignarSuper(self.seleccionadoSupervisor,str(idArtCreado))
+                    idArtCreado = self.contr.idUltimaARTRut(self.rut)
+                    self.contr.actualizarEstadoArt3(str(idArtCreado))
+                    self.infoEndArt.setText("Se notificara tarjeta verde al supervisor")
+                    print("no se creo la ART")
+            else:
+                self.infoEndArt.setText("No se creo la ART faltan preguntas transversales")
+                print("no se creo la ART falta preguntas transversales")
+                self.hide
